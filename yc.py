@@ -1,8 +1,11 @@
-from datetime import datetime
+from datetime import date
+from daycount import *
 
 import pandas as pd
 import numpy as np
 
+import pathlib
+yc_file_name = pathlib.Path(__file__).parent.resolve()
 
 BC_KEY_DAYS = {
     30: "BC_1MONTH",
@@ -33,17 +36,19 @@ BC_DAYS = [
 ]
 
 
-class YieldCurve:
+class UnbasedYieldCurve:
     min_yc_days = 30
     min_year = 2014
     df: pd.DataFrame
 
     def __init__(self):
-        self.df = pd.read_csv("yc.csv", parse_dates=["date"]).set_index("date")
+        self.df = pd.read_csv(str(yc_file_name) + "/yc.csv", parse_dates=["date"]).set_index("date")
 
-    def get_yc_rate(self, base_date: datetime, forward_date: datetime):
-        assert base_date < forward_date
+    def get_yc_rate(self, base_date: date, forward_date: date):
+        assert base_date <= forward_date
         assert base_date.year >= self.min_year
+        if base_date == forward_date:
+            return 0
         row = self.__find_yc_row_by_date(base_date)
         delta_days = (forward_date - base_date).days
         print(row.values)
@@ -56,8 +61,8 @@ class YieldCurve:
             a = self.__get_value(row, idx)
             b = self.__get_value(row, idx + 1)
             return (b - a) * (delta_days - start) / (finish - start) + a
-
-    def __find_yc_row_by_date(self, base_date: datetime):
+        
+    def __find_yc_row_by_date(self, base_date: date):
         return self.df.iloc[self.df.index.get_indexer([base_date], method="pad")]
 
     @staticmethod
@@ -68,10 +73,20 @@ class YieldCurve:
     @staticmethod
     def __get_value(row, column_id):
         return row[BC_KEY_DAYS[BC_DAYS[column_id]]].values[0]
-
-
-# testing
-# c = YieldCurve()
-# print(c.get_yc_rate(datetime(2014, 1, 20), datetime(2014, 1, 25)))
-# print(c.get_yc_rate(datetime(2014, 1, 20), datetime(2014, 5, 25)))
-# print(c.get_yc_rate(datetime(2014, 1, 20), datetime(2018, 5, 25)))
+    
+class YieldCurve:
+    inner_yc = UnbasedYieldCurve()
+    base_date = date(2022, 3, 23) #random date just for init
+    
+    def __init__(self, base_date: date):
+        self.base_date = base_date
+      
+    def get_rate(self, date: date):
+        return self.inner_yc.get_yc_rate(self.base_date, date)
+    
+    def get_disc_fact(self, date: date):
+        rate = self.get_rate(date)
+        year_fraction = calc_year_fraction_from_dates(self.base_date, date)
+        return np.exp(-rate * year_fraction)
+        
+        
