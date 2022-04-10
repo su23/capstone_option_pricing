@@ -32,7 +32,7 @@ def vol_surface_returns_something():
     vol = surface.get_vol(a_date, a_spot)
     
     # assert
-    assert vol == 0.05, f"Expected 0.05 but got {vol}"
+    assert vol == 0.15, f"Expected 0.05 but got {vol}"
     
 def vol_surface_returns_zero_for_weekends():
     # arrange

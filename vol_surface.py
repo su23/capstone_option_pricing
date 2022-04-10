@@ -29,7 +29,7 @@ class VolSurface(ISurface):
     #TODO: Ideally we should use US trading calendar, not just weekends here
         if date.weekday() > 4:
             return 0
-        return 0.05
+        return 0.15
     
     def get_vol_yf(self, year_fraction: float, spot:float) -> float:
         date = convert_year_fraction_to_date(self.as_of_date, year_fraction)

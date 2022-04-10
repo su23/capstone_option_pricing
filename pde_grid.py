@@ -63,6 +63,8 @@ class PdeGrid:
     def interpolate_t0(self) -> float:
         spot_values = self.spot_points
         t0_values = self.grid[:,0]
+        #print("S "+str(spot_values))
+        #print("T0s " + str(t0_values))
         interp_f = interp1d(spot_values, t0_values)
         return interp_f(self.spot)
     

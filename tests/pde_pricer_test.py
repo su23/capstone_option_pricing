@@ -175,14 +175,14 @@ def call_price_has_correct_dynamics():
 
 def put_price_has_correct_dynamics():
     # arrange
-    n_time_values = 5
+    n_time_values = 10
     n_spot_values = 10
     as_of_date = date(2014, 1, 20)
     spot = 2680
     strike1 = 2500
     strike2 = 3000
     max_spot_mult = 1.5
-    expiry_year_fraction = 1
+    expiry_year_fraction = 2
     
     curve = YieldCurve(as_of_date)
     surface = VolSurface(as_of_date)
@@ -195,17 +195,25 @@ def put_price_has_correct_dynamics():
     discounted_payoff2 = DiscountedPayoff(payoff2, curve)
     grid2 = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
     pricer2 = PdePricer(discounted_payoff2, surface, curve, grid2)
+    #grid2.print_grid()
 
-    
     # act
     
     pv1 = pricer1.price()
     pv2 = pricer2.price()
     print(f"PVp(K={strike1}) = {pv1}, PVp(K={strike2}) = {pv2}")
+    #grid2.print_grid()
     
     # assert
     assert pv1 < pv2, f"Expected a put with lower strike to be cheaper, but tot {pv1} vs {pv2}"
     
+#TODO: add tests: higher vol means more expensive option
+#TODO: add tests: higher rates mean less expensive option
+#TODO: add tests: deep OTM costs nothing
+#TODO: add tests: deep ITM is df*forward
+#TODO: check how better grid affects result (should converge)
+#TODO: test calls with const vol vs Black-Scholes
+
 
 def all_pde_pricer_tests():
     test_case1 = ExceptionHandlingTestCase()
