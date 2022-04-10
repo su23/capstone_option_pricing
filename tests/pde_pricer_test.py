@@ -105,9 +105,10 @@ def realistic_grid_init_test_put():
     payoff = PutPayoff(strike)
     discounted_payoff = DiscountedPayoff(payoff, curve)
     grid = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer = PdePricer(discounted_payoff, surface, curve, grid)
     
     # act
-    pricer = PdePricer(discounted_payoff, surface, curve, grid)
+    
     pv = pricer.price()
     print("Put, PV = " + str(pv))
     #grid.print_grid()
@@ -129,14 +130,81 @@ def realistic_grid_init_test_call():
     payoff = CallPayoff(strike)
     discounted_payoff = DiscountedPayoff(payoff, curve)
     grid = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer = PdePricer(discounted_payoff, surface, curve, grid)
     
     # act
-    pricer = PdePricer(discounted_payoff, surface, curve, grid)
+    
     pv = pricer.price()
     print("Call, PV = " + str(pv))
     #grid.print_grid()
     
     # assert is printout above
+    
+def call_price_has_correct_dynamics():
+    # arrange
+    n_time_values = 5
+    n_spot_values = 10
+    as_of_date = date(2014, 1, 20)
+    spot = 2680
+    strike1 = 2000
+    strike2 = 2500
+    max_spot_mult = 1.5
+    expiry_year_fraction = 1
+    
+    curve = YieldCurve(as_of_date)
+    surface = VolSurface(as_of_date)
+    payoff1 = CallPayoff(strike1)
+    discounted_payoff1 = DiscountedPayoff(payoff1, curve)
+    grid1 = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer1 = PdePricer(discounted_payoff1, surface, curve, grid1)
+    
+    payoff2 = CallPayoff(strike2)
+    discounted_payoff2 = DiscountedPayoff(payoff2, curve)
+    grid2 = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer2 = PdePricer(discounted_payoff2, surface, curve, grid2)
+
+    
+    # act
+    
+    pv1 = pricer1.price()
+    pv2 = pricer2.price()
+    print(f"PVc(K={strike1}) = {pv1}, PVc(K={strike2}) = {pv2}")
+    
+    # assert
+    assert pv1 > pv2, f"Expected a call with lower strike to be more expensive, but tot {pv1} vs {pv2}"
+
+def put_price_has_correct_dynamics():
+    # arrange
+    n_time_values = 5
+    n_spot_values = 10
+    as_of_date = date(2014, 1, 20)
+    spot = 2680
+    strike1 = 2500
+    strike2 = 3000
+    max_spot_mult = 1.5
+    expiry_year_fraction = 1
+    
+    curve = YieldCurve(as_of_date)
+    surface = VolSurface(as_of_date)
+    payoff1 = PutPayoff(strike1)
+    discounted_payoff1 = DiscountedPayoff(payoff1, curve)
+    grid1 = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer1 = PdePricer(discounted_payoff1, surface, curve, grid1)
+    
+    payoff2 = PutPayoff(strike2)
+    discounted_payoff2 = DiscountedPayoff(payoff2, curve)
+    grid2 = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer2 = PdePricer(discounted_payoff2, surface, curve, grid2)
+
+    
+    # act
+    
+    pv1 = pricer1.price()
+    pv2 = pricer2.price()
+    print(f"PVp(K={strike1}) = {pv1}, PVp(K={strike2}) = {pv2}")
+    
+    # assert
+    assert pv1 < pv2, f"Expected a put with lower strike to be cheaper, but tot {pv1} vs {pv2}"
     
 
 def all_pde_pricer_tests():
@@ -148,6 +216,8 @@ def all_pde_pricer_tests():
     initialises_min_spot_grid_values()
     realistic_grid_init_test_put()
     realistic_grid_init_test_call()
+    call_price_has_correct_dynamics()
+    put_price_has_correct_dynamics()
     
     
 all_pde_pricer_tests()
