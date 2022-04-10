@@ -185,6 +185,44 @@ def interpolate_t0_interpolates():
     # assert
     assert actual == expected_pv, f"Expected {expected_pv}, but got {actual}"
     
+def delta_spot_is_constant():
+    # arrange
+    max_t = 4
+    n_spot_values = 100
+    n_time_values = 2
+    spot = 100;
+        
+    grid = PdeGrid(max_t, n_time_values, spot, 1.5, n_spot_values)
+    grid.build_grid()
+    
+    # act
+    delta_spot1 = grid.get_spot_for_index(12)-grid.get_spot_for_index(11)
+    delta_spot2 = grid.get_spot_for_index(51)-grid.get_spot_for_index(50)
+    delta_spot = grid.get_delta_spot()
+
+    #assert
+    assert abs(delta_spot - delta_spot1) < 1e-10, f"Expected {delta_spot}, got {delta_spot1}"
+    assert abs(delta_spot1 - delta_spot2) < 1e-10, f"Expected {delta_spot1}, got {delta_spot2}"
+    
+def delta_time_is_constant():
+    # arrange
+    max_t = 4
+    n_spot_values = 2
+    n_time_values = 100
+    spot = 100;
+        
+    grid = PdeGrid(max_t, n_time_values, spot, 1.5, n_spot_values)
+    grid.build_grid()
+    
+    # act
+    delta_time1 = grid.get_t_for_index(12)-grid.get_t_for_index(11)
+    delta_time2 = grid.get_t_for_index(51)-grid.get_t_for_index(50)
+    delta_time = grid.get_delta_t()
+
+    #assert
+    assert abs(delta_time - delta_time1) < 1e-10, f"Expected {delta_time}, got {delta_time1}"
+    assert abs(delta_time1 - delta_time2) < 1e-10, f"Expected {delta_time1}, got {delta_time2}"
+    
     
     
 class ExceptionHandlingTestCase(unittest.TestCase):
@@ -295,6 +333,8 @@ def all_pde_grid_tests():
     set_pv_works()
     get_pv_works()
     interpolate_t0_interpolates()
+    delta_spot_is_constant()
+    delta_time_is_constant()
     
     bounds_check_case = ExceptionHandlingTestCase()
     bounds_check_case.get_t_for_index_throws_for_too_small_index()

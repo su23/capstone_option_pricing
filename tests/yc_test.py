@@ -16,6 +16,9 @@ class MockYieldCurve(ICurve):
     def get_rate(self, date: date) -> float:
         return self.const_rate;
     
+    def get_rate_yf(self, year_fraction: float) -> float:
+        return self.const_rate;
+    
     def get_disc_fact(self, date: date) -> float:
         return self.const_disc_fact;
     

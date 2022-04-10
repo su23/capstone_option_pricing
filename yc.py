@@ -80,6 +80,10 @@ class ICurve:
         """Return interest rate with as of date = curve's date, for 'date' point in time"""
         pass
 
+    def get_rate_yf(self, year_fraction: float) -> float:
+        """Return interest rate with as of date = curve's date, for a date matching 'year_fraction'"""
+        pass
+
     def get_disc_fact(self, date: date) -> float:
         """Return discount factor with as of date = curve's date, for 'date' point in time"""
         pass
@@ -102,6 +106,12 @@ class YieldCurve(ICurve):
       
     def get_rate(self, date: date) -> float:
         return self.inner_yc.get_yc_rate(self.as_of_date, date)
+    
+#SATODO: ad test
+    def get_rate_yf(self, year_fraction: float) -> float:
+        date = convert_year_fraction_to_date(self.as_of_date, year_fraction)
+        return self.inner_yc.get_yc_rate(self.as_of_date, date)
+
     
     def get_disc_fact(self, date: date) -> float:
         rate = self.get_rate(date)

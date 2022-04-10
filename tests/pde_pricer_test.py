@@ -38,10 +38,11 @@ def pde_pricer_initialises_grid():
     as_of_date = date(2022, 4, 11)
     disc_payoff = MockDiscountedPayoff(42, as_of_date)
     surface = MockVolSurface(0.01, as_of_date)
+    curve = MockYieldCurve(0.9, 0.01, as_of_date)
     grid = PdeGrid(2, n_time_values, 100, 1.5, n_spot_values)
     
     # act
-    pricer = PdePricer(disc_payoff, surface, grid)
+    pricer = PdePricer(disc_payoff, surface, curve, grid)
     
     # assert
     assert grid.grid is not None
@@ -64,7 +65,7 @@ def initialises_expiry_grid_values():
     grid = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
     
     # act
-    pricer = PdePricer(discounted_payoff, surface, grid)
+    pricer = PdePricer(discounted_payoff, surface, curve, grid)
     t_exp_value_s0 = grid.get_pv(0, 4)
     t_exp_value_s1 = grid.get_pv(1, 4)
     t_exp_value_s2 = grid.get_pv(2, 4)
@@ -106,10 +107,10 @@ def realistic_grid_init_test_put():
     grid = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
     
     # act
-    pricer = PdePricer(discounted_payoff, surface, grid)
+    pricer = PdePricer(discounted_payoff, surface, curve, grid)
     pv = pricer.price()
     print("Put, PV = " + str(pv))
-    grid.print_grid()
+    #grid.print_grid()
     
     # assert is printout above
 
@@ -130,10 +131,10 @@ def realistic_grid_init_test_call():
     grid = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
     
     # act
-    pricer = PdePricer(discounted_payoff, surface, grid)
+    pricer = PdePricer(discounted_payoff, surface, curve, grid)
     pv = pricer.price()
     print("Call, PV = " + str(pv))
-    grid.print_grid()
+    #grid.print_grid()
     
     # assert is printout above
     

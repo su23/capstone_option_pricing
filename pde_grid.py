@@ -65,3 +65,9 @@ class PdeGrid:
         t0_values = self.grid[:,0]
         interp_f = interp1d(spot_values, t0_values)
         return interp_f(self.spot)
+    
+    def get_delta_spot(self):
+        return self.spot_points[1]-self.spot_points[0]
+    
+    def get_delta_t(self):
+        return self.time_points[1]-self.time_points[0]
