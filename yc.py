@@ -51,7 +51,7 @@ class UnbasedYieldCurve:
             return 0
         row = self.__find_yc_row_by_date(base_date)
         delta_days = (forward_date - base_date).days
-        print(row.values)
+        #print(row.values)
         if delta_days <= BC_DAYS[0]:
             return self.__get_value(row, 0)
         else:

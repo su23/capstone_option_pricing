@@ -24,7 +24,7 @@ class MockVolSurface(ISurface):
 def vol_surface_returns_something():
     # arrange
     as_of_date = date(2022, 1, 1)
-    a_date = date(2022, 4, 10)
+    a_date = date(2022, 4, 11)
     a_spot = 100500
     surface = VolSurface(as_of_date)
     
@@ -33,6 +33,23 @@ def vol_surface_returns_something():
     
     # assert
     assert vol == 0.05, f"Expected 0.05 but got {vol}"
+    
+def vol_surface_returns_zero_for_weekends():
+    # arrange
+    as_of_date = date(2022, 1, 1)
+    sat = date(2022, 4, 9)
+    sun = date(2022, 4, 10)
+    a_spot = 100500
+    surface = VolSurface(as_of_date)
+    
+    # act
+    sat_vol = surface.get_vol(sat, a_spot)
+    sun_vol = surface.get_vol(sun, a_spot)
+    
+    # assert
+    assert sat_vol == 0, f"Expected Sat vol to be 0 but got {vol}"
+    assert sun_vol == 0, f"Expected Sun vol to be 0, but got {vol}"
+
     
 def vol_surface_returns_correct_vol_by_year_fraction():
     # arrange

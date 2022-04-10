@@ -20,12 +20,15 @@ class ISurface:
 
     
 class VolSurface(ISurface):
-    #TODO: use base_date
+    #TODO: use as_of_date
     def __init__(self, as_of_date: date):
         self.as_of_date = as_of_date
         
     #TODO: implement properly
     def get_vol(self, date: date, spot:float) -> float:
+    #TODO: Ideally we should use US trading calendar, not just weekends here
+        if date.weekday() > 4:
+            return 0
         return 0.05
     
     def get_vol_yf(self, year_fraction: float, spot:float) -> float:
