@@ -84,6 +84,10 @@ class ICurve:
         """Return discount factor with as of date = curve's date, for 'date' point in time"""
         pass
     
+    def get_disc_fact_yf(self, year_fraction: float) -> float:
+        """Return discount factor with as of date = curve's date, for a given year fraction"""
+        pass
+    
     def get_as_of_date() -> date:
         """Returns base date of the curve"""
         pass
@@ -102,6 +106,11 @@ class YieldCurve(ICurve):
     def get_disc_fact(self, date: date) -> float:
         rate = self.get_rate(date)
         year_fraction = calc_year_fraction_from_dates(self.as_of_date, date)
+        return np.exp(-rate * year_fraction)
+    
+    def get_disc_fact_yf(self, year_fraction: float) -> float:
+        date = convert_year_fraction_to_date(self.as_of_date, year_fraction)
+        rate = self.get_rate(date)
         return np.exp(-rate * year_fraction)
     
     def get_as_of_date(self) -> date:

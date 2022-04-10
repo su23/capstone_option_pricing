@@ -34,6 +34,22 @@ def vol_surface_returns_something():
     # assert
     assert vol == 0.05, f"Expected 0.05 but got {vol}"
     
+def vol_surface_returns_correct_vol_by_year_fraction():
+    # arrange
+    as_of_date = date(2022, 1, 1)
+    expiry = date(2022, 4, 10)
+    a_spot = 100500
+    surface = VolSurface(as_of_date)
+    year_fraction = calc_year_fraction_from_dates(as_of_date, expiry)
+    expected_vol = surface.get_vol(expiry, a_spot);
+    
+    # act
+    vol = surface.get_vol_yf(year_fraction, a_spot)
+    
+    # assert
+    assert vol == expected_vol, f"Expected {expected_vol} but got {vol}"
+
+    
 def vol_surface_returns_as_of_date():
     # arrange
     as_of_date = date(2022, 1, 1)
@@ -72,6 +88,7 @@ def mock_vol_surface_returns_test_as_of_date():
     
 def all_vol_surface_tests():
     vol_surface_returns_something()
+    vol_surface_returns_correct_vol_by_year_fraction()
     vol_surface_returns_as_of_date()
     mock_vol_surface_returns_const()
     mock_vol_surface_returns_test_as_of_date()

@@ -26,6 +26,9 @@ class MockDiscountedPayoff(IDiscountedPayoff):
     
     def calc_discounted_payoff(self, date: date, spot: float) -> float:
         return self.const_payoff
+    
+    def calc_discounted_payoff_yf(self, year_fraction: float, spot: float) -> float:
+        return self.const_payoff
 
     def get_as_of_date(self) -> date:    
         return self.as_of_date
@@ -143,6 +146,40 @@ def test_discounted_payoff():
     # assert
     assert disc_payoff == expected_disc_payoff, f"Expected {expected_disc_payoff}, got {disc_payoff}"
     
+def test_discounted_payoff_by_year_fraction():
+    # arrange
+    payoff = MockPayoff(11)
+    curve = MockYieldCurve(0.42, 0.11)
+    
+    disc_payoff_obj = DiscountedPayoff(payoff, curve)
+    
+    expected_disc_payoff = 11 * 0.42
+    
+    # act
+    disc_payoff = disc_payoff_obj.calc_discounted_payoff_yf(100, 1024768)
+    
+    # assert
+    assert disc_payoff == expected_disc_payoff, f"Expected {expected_disc_payoff}, got {disc_payoff}"
+
+def test_discounted_payoff_by_year_fraction_real_yield_curve():
+    # arrange
+    year_fraction = 2.07
+    payoff = MockPayoff(11)
+    curve = YieldCurve(date(2014, 1, 20))
+    
+    disc_fact = curve.get_disc_fact_yf(year_fraction)
+    
+    disc_payoff_obj = DiscountedPayoff(payoff, curve)
+    
+    expected_disc_payoff = 11 * disc_fact
+    
+    # act
+    disc_payoff = disc_payoff_obj.calc_discounted_payoff_yf(year_fraction, 1024768)
+    
+    # assert
+    assert disc_payoff == expected_disc_payoff, f"Expected {expected_disc_payoff}, got {disc_payoff}"
+
+    
 def discounted_payoff_returns_curves_as_of_date():
     # arrange
     payoff = MockPayoff(11)
@@ -163,6 +200,17 @@ def mock_discounted_payoff_returns_parameter_payoff():
     
     # act
     actual = payoff.calc_discounted_payoff(a_date, 212);
+    
+    # assert
+    assert actual == 42, f"Expected 42 but got {actual}"
+    
+def mock_discounted_payoff_returns_parameter_payoff_for_year_fraction():
+    # arrange
+    payoff = MockDiscountedPayoff(42)
+    a_date = date(2022, 4, 10)
+    
+    # act
+    actual = payoff.calc_discounted_payoff_yf(2.0, 212);
     
     # assert
     assert actual == 42, f"Expected 42 but got {actual}"
@@ -200,8 +248,11 @@ def all_payoff_tests():
     test_default_mock_payoff()
     test_custom_mock_payoff()
     test_discounted_payoff()
+    test_discounted_payoff_by_year_fraction()
+    test_discounted_payoff_by_year_fraction_real_yield_curve()
     discounted_payoff_returns_curves_as_of_date()
     mock_discounted_payoff_returns_parameter_payoff()
+    mock_discounted_payoff_returns_parameter_payoff_for_year_fraction()
     mock_discounted_payoff_returns_test_as_of_date_by_default()
     mock_discounted_payoff_returns_custom_as_of_date()
     
