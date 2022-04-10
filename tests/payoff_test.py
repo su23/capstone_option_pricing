@@ -4,6 +4,7 @@ import sys
 sys.path.append('../')
 
 from datetime import date
+from shared_constants import test_as_of_date
 from payoff import *
 from yc_test import MockYieldCurve
 
@@ -15,6 +16,20 @@ class MockPayoff(IPayoff):
     
     def calc_payoff(self, spot: float) -> float:
         return self.const_payoff
+    
+
+class MockDiscountedPayoff(IDiscountedPayoff):
+    
+    def __init__(self, const_discounted_payoff: float = 42, as_of_date: date = test_as_of_date):
+        self.const_payoff = const_discounted_payoff
+        self.as_of_date = as_of_date
+    
+    def calc_discounted_payoff(self, date: date, spot: float) -> float:
+        return self.const_payoff
+
+    def get_as_of_date(self) -> date:    
+        return self.as_of_date
+    
 
 
 def test_otm_call_payoff():
@@ -116,7 +131,7 @@ def test_discounted_payoff():
     payoff = MockPayoff(11)
     curve = MockYieldCurve(0.42, 0.11)
     
-    disc_payoff_obj = DiscountedPayoff(payoff, curve )
+    disc_payoff_obj = DiscountedPayoff(payoff, curve)
     
     a_date = date(2022, 4, 10)
     
@@ -127,6 +142,53 @@ def test_discounted_payoff():
     
     # assert
     assert disc_payoff == expected_disc_payoff, f"Expected {expected_disc_payoff}, got {disc_payoff}"
+    
+def discounted_payoff_returns_curves_as_of_date():
+    # arrange
+    payoff = MockPayoff(11)
+    curve = MockYieldCurve(0.42, 0.11)
+    
+    disc_payoff_obj = DiscountedPayoff(payoff, curve)
+   
+    # act
+    actual = disc_payoff_obj.get_as_of_date();
+    
+    # assert
+    assert actual == test_as_of_date, f"Expected AsOfDate {test_as_of_date} but got {actual}"
+    
+def mock_discounted_payoff_returns_parameter_payoff():
+    # arrange
+    payoff = MockDiscountedPayoff(42)
+    a_date = date(2022, 4, 10)
+    
+    # act
+    actual = payoff.calc_discounted_payoff(a_date, 212);
+    
+    # assert
+    assert actual == 42, f"Expected 42 but got {actual}"
+
+    
+def mock_discounted_payoff_returns_test_as_of_date_by_default():
+    # arrange
+    payoff = MockDiscountedPayoff()
+    
+    # act
+    actual = payoff.get_as_of_date();
+    
+    # assert
+    assert actual == test_as_of_date, f"Expected AsOfDate {test_as_of_date} but got {actual}"
+    
+def mock_discounted_payoff_returns_custom_as_of_date():
+    # arrange
+    custom_date = date(2022, 4, 1)
+    payoff = MockDiscountedPayoff(42, custom_date)
+    
+    # act
+    actual = payoff.get_as_of_date();
+    
+    # assert
+    assert actual == custom_date, f"Expected AsOfDate {custom_date} but got {actual}"
+
 
 def all_payoff_tests():
     test_otm_call_payoff()
@@ -138,6 +200,10 @@ def all_payoff_tests():
     test_default_mock_payoff()
     test_custom_mock_payoff()
     test_discounted_payoff()
+    discounted_payoff_returns_curves_as_of_date()
+    mock_discounted_payoff_returns_parameter_payoff()
+    mock_discounted_payoff_returns_test_as_of_date_by_default()
+    mock_discounted_payoff_returns_custom_as_of_date()
     
     
 all_payoff_tests()
