@@ -74,17 +74,28 @@ class UnbasedYieldCurve:
     def __get_value(row, column_id):
         return row[BC_KEY_DAYS[BC_DAYS[column_id]]].values[0]
     
-class YieldCurve:
+    
+class ICurve:
+    def get_rate(self, date: date) -> float:
+        """Return interest rate with as of date = curve's date, for 'date' point in time"""
+        pass
+
+    def get_disc_fact(self, date: date) -> float:
+        """Return discount factor with as of date = curve's date, for 'date' point in time"""
+        pass
+
+    
+class YieldCurve(ICurve):
     inner_yc = UnbasedYieldCurve()
     base_date = date(2022, 3, 23) #random date just for init
     
     def __init__(self, base_date: date):
         self.base_date = base_date
       
-    def get_rate(self, date: date):
+    def get_rate(self, date: date) -> float:
         return self.inner_yc.get_yc_rate(self.base_date, date)
     
-    def get_disc_fact(self, date: date):
+    def get_disc_fact(self, date: date) -> float:
         rate = self.get_rate(date)
         year_fraction = calc_year_fraction_from_dates(self.base_date, date)
         return np.exp(-rate * year_fraction)

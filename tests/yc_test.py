@@ -6,6 +6,17 @@ sys.path.append('../')
 from datetime import date
 from yc import *
 
+class MockYieldCurve(ICurve):
+    def __init__(self, const_disc_fact: float=0.9, const_rate: float=0.01):
+        self.const_disc_fact = const_disc_fact
+        self.const_rate = const_rate
+      
+    def get_rate(self, date: date) -> float:
+        return self.const_rate;
+    
+    def get_disc_fact(self, date: date) -> float:
+        return self.const_disc_fact;
+
 
 def yc_rate_tests():
     # arrange
@@ -48,11 +59,55 @@ def yc_disc_fact_tests():
     assert df_zero_days == 1, f"expected {1} got {df_zero_days}"
     assert df_one_year < 1, f"expected less than 1 got {df_one_year}"
     assert df_one_year == expected_df_one_year, f"expected {expected_df_one_year} than 0.8 got {df_one_year}"
-
+    
+def yc_default_mock_tests():
+    # arrange
+    
+    a_date = date(2022, 4, 10)
+    mock = MockYieldCurve()
+    
+    # act
+    df = mock.get_disc_fact(a_date)
+    rate = mock.get_rate(a_date)
+    
+    # assert
+    assert df == 0.9, f"Expected default DF of 0.9, got {df}"
+    assert rate == 0.01, f"Expected default rate of 0.01, got {rate}"
+    
+def yc_semi_default_mock_tests():
+    # arrange
+    
+    a_date = date(2022, 4, 10)
+    mock = MockYieldCurve(0.42)
+    
+    # act
+    df = mock.get_disc_fact(a_date)
+    rate = mock.get_rate(a_date)
+    
+    # assert
+    assert df == 0.42, f"Expected DF of 0.42, got {df}"
+    assert rate == 0.01, f"Expected default rate of 0.01, got {rate}"    
+    
+def yc_custom_mock_tests():
+    # arrange
+    
+    a_date = date(2022, 4, 10)
+    mock = MockYieldCurve(0.42, 0.11)
+    
+    # act
+    df = mock.get_disc_fact(a_date)
+    rate = mock.get_rate(a_date)
+    
+    # assert
+    assert df == 0.42, f"Expected DF of 0.42, got {df}"
+    assert rate == 0.11, f"Expected rate of 0.11, got {rate}"
     
 def all_yc_tests():
     yc_rate_tests()
     yc_disc_fact_tests()
+    yc_default_mock_tests()
+    yc_semi_default_mock_tests()
+    yc_custom_mock_tests()
     
     
 all_yc_tests()
