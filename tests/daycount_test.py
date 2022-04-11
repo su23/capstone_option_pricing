@@ -32,8 +32,39 @@ def test_year_fractions():
     assert yf_zero == 0, f"expected {0} got {yf_zero}"
     
     
+def test_year_fraction_is_correctly_converted_back_to_date_impl(expiry: date):
+    # arrange
+    as_of_date = date(2020, 4, 1)
+    
+    year_fraction = calc_year_fraction_from_dates(as_of_date, expiry)
+    
+    # act
+    roundtrip_expiry = convert_year_fraction_to_date(as_of_date, year_fraction)
+    
+    # assert
+    assert expiry == roundtrip_expiry, f"Expected {expiry} but got {roundtrip_expiry}"
+
+
+def test_year_fraction_is_correctly_converted_back_to_date_1_day():
+    test_year_fraction_is_correctly_converted_back_to_date_impl(date(2020, 4, 2))
+    
+def test_year_fraction_is_correctly_converted_back_to_date_10_days():
+    test_year_fraction_is_correctly_converted_back_to_date_impl(date(2020, 4, 11))
+
+def test_year_fraction_is_correctly_converted_back_to_date_1_year():
+    test_year_fraction_is_correctly_converted_back_to_date_impl(date(2021, 4, 1))
+
+    
+def test_year_fraction_is_correctly_converted_back_to_date_10_years():
+    test_year_fraction_is_correctly_converted_back_to_date_impl(date(2030, 4, 1))
+
+    
 def all_daycount_tests():
-    test_year_fractions();
+    test_year_fractions()
+    test_year_fraction_is_correctly_converted_back_to_date_1_day()
+    test_year_fraction_is_correctly_converted_back_to_date_10_days()
+    test_year_fraction_is_correctly_converted_back_to_date_1_year()
+    test_year_fraction_is_correctly_converted_back_to_date_10_years()
     
     
 all_daycount_tests()
