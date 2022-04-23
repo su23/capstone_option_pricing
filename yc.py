@@ -51,7 +51,6 @@ class UnbasedYieldCurve:
             return 0
         row = self.__find_yc_row_by_date(base_date)
         delta_days = (forward_date - base_date).days
-        #print(row.values)
         if delta_days <= BC_DAYS[0]:
             return self.__get_value(row, 0)
         else:
@@ -92,27 +91,28 @@ class ICurve:
         """Return discount factor with as of date = curve's date, for a given year fraction"""
         pass
     
-    def get_as_of_date() -> date:
+    def get_as_of_date(self) -> date:
         """Returns base date of the curve"""
         pass
 
 
-    
 class YieldCurve(ICurve):
     inner_yc = UnbasedYieldCurve()
+    cache = {}
     
     def __init__(self, as_of_date: date):
         self.as_of_date = as_of_date
       
     def get_rate(self, date: date) -> float:
-        return self.inner_yc.get_yc_rate(self.as_of_date, date)
+        if date not in self.cache:
+            self.cache[date] = self.inner_yc.get_yc_rate(self.as_of_date, date)
+        return self.cache[date]
     
 #SATODO: ad test
     def get_rate_yf(self, year_fraction: float) -> float:
         date = convert_year_fraction_to_date(self.as_of_date, year_fraction)
-        return self.inner_yc.get_yc_rate(self.as_of_date, date)
+        return self.get_rate(date)
 
-    
     def get_disc_fact(self, date: date) -> float:
         rate = self.get_rate(date)
         year_fraction = calc_year_fraction_from_dates(self.as_of_date, date)
@@ -125,5 +125,3 @@ class YieldCurve(ICurve):
     
     def get_as_of_date(self) -> date:
         return self.as_of_date
-        
-        

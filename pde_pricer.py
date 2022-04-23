@@ -107,9 +107,4 @@ class PdePricer:
                 #one can use this to check - should be less than the above 
                 #self.grid.set_pv(spot_idx, t_idx, payoff)
             
-            
         return self.grid.interpolate_t0()
-            
-            
-        
-        
