@@ -3,6 +3,7 @@ import unittest
 
 import sys
 sys.path.append('../')
+sys.path.append('../tests')
 
 from datetime import date
 from yc import YieldCurve
@@ -11,17 +12,20 @@ from payoff import PutPayoff, CallPayoff, DiscountedPayoff
 import pandas as pd
 from pde_pricer import *
 import time
+from yc_test import MockYieldCurve
 
 
-def put_price_has_correct_dynamics(nTimeValues:int, nSpotValues: int) -> float:
-    # arrange
-    as_of_date = date(2014, 1, 20)
+as_of_date = date(2014, 1, 20)
+
+def put_price_has_correct_dynamics(nTimeValues:int, nSpotValues: int, overrideYc: ICurve = None) -> float:
     spot = 2680
     strike = 2700
     max_spot_mult = 1.5
     expiry_year_fraction = 2
     
-    curve = YieldCurve(as_of_date)
+    curve = overrideYc;
+    if (curve == None):
+        curve = YieldCurve(as_of_date)
     surface = VolSurface(as_of_date)
     payoff = PutPayoff(strike)
     discounted_payoff = DiscountedPayoff(payoff, curve)
@@ -44,6 +48,19 @@ def time_grid_dependency_test():
         result.at['time',ntv]=end-start
     print(result)
     result.to_csv("pde_speed_report_t.csv")
+    
+def time_grid_dependency_test_const_rate():
+    ycOverride = MockYieldCurve(0.98, 0.01, as_of_date )
+    result = pd.DataFrame()
+    for ntv in range(10, 1010, 10):
+        start = time.time()
+        pv = put_price_has_correct_dynamics(ntv, 50, ycOverride)
+        end = time.time()
+        result.at['pv',ntv]=pv
+        result.at['time',ntv]=end-start
+    print(result)
+    result.to_csv("pde_speed_report_t_const_rate.csv")
+
 
 def spot_grid_dependency_test():
     result = pd.DataFrame()
@@ -69,5 +86,6 @@ def spot_and_time_grids_dependency_test():
         
     
 #time_grid_dependency_test()
+time_grid_dependency_test_const_rate()
 #spot_grid_dependency_test()
-spot_and_time_grids_dependency_test()
+#spot_and_time_grids_dependency_test()
