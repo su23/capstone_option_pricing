@@ -211,7 +211,6 @@ def put_price_has_correct_dynamics():
 #TODO: add tests: higher rates mean less expensive option
 #TODO: add tests: deep OTM costs nothing
 #TODO: add tests: deep ITM is df*forward
-#TODO: check how better grid affects result (should converge)
 #TODO: test calls with const vol vs Black-Scholes
 
 
