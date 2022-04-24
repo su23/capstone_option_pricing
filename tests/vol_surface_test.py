@@ -6,6 +6,9 @@ sys.path.append('../')
 from datetime import date
 from shared_constants import test_as_of_date
 from vol_surface import *
+import time
+import pandas as pd
+from pandas import DataFrame
 
 class MockVolSurface(ISurface):
     def __init__(self, const_vol: float, as_of_date: date = test_as_of_date):
@@ -18,6 +21,51 @@ class MockVolSurface(ISurface):
     
     def get_as_of_date(self) -> date:
         return self.as_of_date
+
+
+class VolSurfaceBase(ISurface):
+    df_call: DataFrame
+    df_put: DataFrame
+
+    def __init__(self, asset_name: str, as_of_date: date = test_as_of_date):
+        self.load(asset_name)
+        self.as_of_date = as_of_date
+
+    # TODO: implement properly
+    def get_vol(self, date: date, spot: float) -> float:
+        if date.weekday() > 4:
+            return 0
+
+        dateVols = self.df_call[self.df_call['DataDate'].dt.date == date]
+        result = dateVols.iloc[(dateVols['Strike'] - spot).abs().argsort()[:1]]
+        iv = result["IV"]
+        count = iv.count()
+        if count == 0:
+            return 0
+
+        return iv.values[0]
+
+    def get_vol_yf(self, year_fraction: float, spot: float) -> float:
+        date = convert_year_fraction_to_date(self.as_of_date, year_fraction)
+        return self.get_vol(date, spot)
+
+    def get_as_of_date(self) -> date:
+        return self.as_of_date
+
+    def load(self, asset_name: str):
+        print(f"Start loading {asset_name}")
+        t = time.process_time()
+        data = pd.read_csv(f'{asset_name}.csv', sep=",").filter(['UnderlyingPrice', 'Type', 'Expiration',
+                                                                 'DataDate', 'Strike', 'Last', 'Bid', 'Ask', 'Volume',
+                                                                 'OpenInterest', 'IV', 'Delta', 'Gamma',
+                                                                 'Theta', 'Vega'])
+        data['Expiration'] = pd.to_datetime(data['Expiration'])
+        data['DataDate'] = pd.to_datetime(data['DataDate'])
+        data['Days'] = (data['Expiration'] - data['DataDate']).astype('timedelta64[D]').astype(int)
+        self.df_call = data.loc[data['Type'] == "call"]
+        self.df_put = data.loc[data['Type'] == "put"]
+        elapsed_time = time.process_time() - t
+        print(f"End loading in {elapsed_time} seconds")
 
     
 #TODO: implement properly once VolSurface is properly implemented
@@ -47,8 +95,8 @@ def vol_surface_returns_zero_for_weekends():
     sun_vol = surface.get_vol(sun, a_spot)
     
     # assert
-    assert sat_vol == 0, f"Expected Sat vol to be 0 but got {vol}"
-    assert sun_vol == 0, f"Expected Sun vol to be 0, but got {vol}"
+    assert sat_vol == 0, f"Expected Sat vol to be 0 but got {sat_vol}"
+    assert sun_vol == 0, f"Expected Sun vol to be 0, but got {sun_vol}"
 
     
 def vol_surface_returns_correct_vol_by_year_fraction():
