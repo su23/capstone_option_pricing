@@ -16,6 +16,9 @@ class MockVolSurface(ISurface):
     def get_vol(self, date: date, spot:float) -> float:
         return self.const_vol
     
+    def get_vol_yf(self, year_fraction: float, spot: float) -> float:
+        return self.const_vol
+    
     def get_as_of_date(self) -> date:
         return self.as_of_date
 
