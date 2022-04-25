@@ -5,6 +5,7 @@ from daycount import *
 import time
 import pandas as pd
 from pandas import DataFrame
+from scipy.interpolate import interp2d
 
 class ISurface:
     def get_vol(self, date: date, strike:float) -> float:
@@ -62,17 +63,30 @@ class VolSurfaceBase(ISurface):
         vols = self.date_vols
 
         # very rough
-        real_strike = vols.iloc[(vols['Strike'] - strike).abs().argsort()[:1]]['Strike'].values[0]
-        vols = vols[vols['Strike'] == real_strike]
-        vols = vols.iloc[(vols['Expiration'].dt.date - date).abs().argsort()[:1]]
-        result = vols
+        #real_strike = vols.iloc[(vols['Strike'] - strike).abs().argsort()[:1]]['Strike'].values[0]
+        #vols = vols[vols['Strike'] == real_strike]
 
-        iv = result["IV"]
-        count = iv.count()
-        if count == 0:
-            return 0
+        #vols = vols.iloc[(vols['Expiration'].dt.date - date).abs().argsort()[:1]]
+        # interp_f = interp1d(spot_values, t0_values)
+        # return interp_f(self.spot)
 
-        return iv.values[0]
+        strikes = vols['Strike'].to_numpy()
+        expiry = vols['Days'].to_numpy()
+        ivs = vols['IV'].to_numpy()
+
+        interp_f = interp2d(strikes, expiry, ivs)
+        days = (date - self.as_of_date).days
+        result = interp_f(strike, days)
+        return result
+
+        # result = vols
+
+        # iv = result["IV"]
+        # count = iv.count()
+        # if count == 0:
+        #     return 0
+        #
+        # return iv.values[0]
 
     def get_vol_yf(self, year_fraction: float, strike: float) -> float:
         date = convert_year_fraction_to_date(self.as_of_date, year_fraction)
@@ -81,22 +95,15 @@ class VolSurfaceBase(ISurface):
     def get_as_of_date(self) -> date:
         return self.as_of_date
 
-    # def get_spot(self) -> float:
-    #     return self.spot
-    #
-    # def get_strike(self) -> float:
-    #     return self.strike
-    #
-    # def get_mid(self) -> float:
-    #     return self.mid
-
     def calculate_initial_values(self):
         self.date_vols = self.df_put[self.df_put['DataDate'].dt.date == self.as_of_date]
         # save file
         # self.date_vols.to_csv(f"GOOGLE2.csv", mode='a', header=True)
 
         # getting closest DN vol
-        result = self.date_vols.iloc[(self.date_vols['Delta'] + 0.5).abs().argsort()[:1]]
+        result = self.date_vols[self.date_vols['Strike'] == 1000.0]
+        result = result[result['Days'] == 360]
+        # result = self.date_vols.iloc[(self.date_vols['Delta']).abs().argsort()[:1]]
         self.spot = result["UnderlyingPrice"].values[0]
         self.strike = result["Strike"].values[0]
         bid = result["Bid"].values[0]
