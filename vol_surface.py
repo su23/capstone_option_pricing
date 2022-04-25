@@ -7,7 +7,7 @@ import pandas as pd
 from pandas import DataFrame
 
 class ISurface:
-    def get_vol(self, date: date, spot:float) -> float:
+    def get_vol(self, date: date, strike:float) -> float:
         """Returns annualised interpolated vol with as of date = surface's date, for 'date' point in time and 'spot' value of underlying """
         pass
     

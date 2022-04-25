@@ -65,6 +65,10 @@ def realistic_grid_init_test_put():
         expiry_year_fraction = surface.year_fraction
         spot = surface.spot
         strike = surface.strike
+        
+        spot_vol=surface.get_vol_yf(expiry_year_fraction, strike)
+        
+        print(f"expiry_year_fraction={expiry_year_fraction}, spot={spot}, stike={strike}, spot_vol={spot_vol}")
 
         payoff = PutPayoff(strike)
         discounted_payoff = DiscountedPayoff(payoff, curve)
@@ -83,7 +87,7 @@ def realistic_grid_init_test_put():
 
 def realistic_grid_init_test_call():
     # arrange
-    n_time_values = 5
+    n_time_values = 1
     n_spot_values = 10
     as_of_date = date(2014, 1, 20)
     spot = 2680

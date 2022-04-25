@@ -17,6 +17,10 @@ class MockPayoff(IPayoff):
     def calc_payoff(self, spot: float) -> float:
         return self.const_payoff
     
+    def get_strike(self) -> float:
+        return 42
+
+    
 
 class MockDiscountedPayoff(IDiscountedPayoff):
     
@@ -32,7 +36,10 @@ class MockDiscountedPayoff(IDiscountedPayoff):
 
     def get_as_of_date(self) -> date:    
         return self.as_of_date
-    
+
+    def get_strike(self) -> float:
+        return 42
+
 
 
 def test_otm_call_payoff():
