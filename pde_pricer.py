@@ -26,7 +26,7 @@ class PdePricer:
         
         t_exp_index = self.grid.n_time_points-1
         
-        t_exp = self.grid.get_t_for_index(t_exp_index);
+        t_exp = self.grid.get_t_for_index(t_exp_index)
         
         min_spot_index = 0
         max_spot_index = self.grid.n_spot_points - 1
