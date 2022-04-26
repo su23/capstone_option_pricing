@@ -7,6 +7,11 @@ class IPayoff:
         """Return undiscounted payoff for a given underlying value"""
         pass
     
+    def get_strike(self) -> float:
+        """Returns strike"""
+        pass
+
+    
 class IDiscountedPayoff:
     def calc_discounted_payoff(self, date: date, spot: float) -> float:
         """Return discounted payoff for a given underlying value and date"""
@@ -19,8 +24,11 @@ class IDiscountedPayoff:
     def get_as_of_date(self) -> date:
         """Return as of date for discounted payoff (normally taken from curve)"""
         pass
-
     
+    def get_strike(self) -> float:
+        """Returns strike"""
+        pass
+   
 
 # Unity notionalnon-discounted Call payoff
 class CallPayoff(IPayoff):
@@ -32,7 +40,9 @@ class CallPayoff(IPayoff):
     def calc_payoff(self, spot: float) -> float:
         return max((spot - self.strike), 0)
     
-    
+    def get_strike(self) -> float:
+        return self.strike
+   
         
 
 
@@ -45,7 +55,10 @@ class PutPayoff(IPayoff):
     
     def calc_payoff(self, spot: float) -> float:
         return max((self.strike - spot), 0)
-        
+ 
+    def get_strike(self) -> float:
+        return self.strike
+       
 
 
 class DiscountedPayoff (IDiscountedPayoff):
@@ -67,3 +80,6 @@ class DiscountedPayoff (IDiscountedPayoff):
     def get_as_of_date(self) -> date:
         return self.curve.get_as_of_date()
 
+    def get_strike(self) -> float:
+        return self.inner_payoff.get_strike()
+ 

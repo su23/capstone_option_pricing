@@ -47,8 +47,8 @@ def test_grid_has_correct_points_for_spot():
 
     actual_n_spot_points = len(grid.spot_points)
     assert actual_n_spot_points == n_spot_values, f"Expected {n_spot_values} rows got {actual_n_spot_points}"
-    assert np.array_equal(expected_spot_points, grid.spot_points), f"Expected {expected_time_points} rows got {grid.time_points}"
-    assert grid.spot_points[0] == min_spot, f"Expected min spot point {min_spots} rows got {grid.spot_points[0]}"
+    assert np.array_equal(expected_spot_points, grid.spot_points), f"Expected {expected_spot_points} rows got {grid.time_points}"
+    assert grid.spot_points[0] == min_spot, f"Expected min spot point {min_spot} rows got {grid.spot_points[0]}"
     assert grid.spot_points[-1] == max_spot, f"Expected min spot point {max_spot} rows got {grid.spot_points[-1]}"
 
     pass

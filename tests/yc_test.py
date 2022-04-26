@@ -35,9 +35,9 @@ def yc_rate_tests():
     c = UnbasedYieldCurve()
     
     # act
-    generic_rate1 = c.get_yc_rate(date(2014, 1, 20), date(2014, 1, 25))
-    generic_rate2 = c.get_yc_rate(date(2014, 1, 20), date(2014, 5, 25))
-    generic_rate3 = c.get_yc_rate(date(2014, 1, 20), date(2018, 5, 25))
+    generic_rate1 = c.get_yc_rate(date(2014, 1, 20), date(2014, 1, 25)) / 100
+    generic_rate2 = c.get_yc_rate(date(2014, 1, 20), date(2014, 5, 25)) / 100
+    generic_rate3 = c.get_yc_rate(date(2014, 1, 20), date(2018, 5, 25)) / 100
     
     exact_curve = YieldCurve(date(2014, 1, 20))
     

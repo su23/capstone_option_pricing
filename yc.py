@@ -105,7 +105,7 @@ class YieldCurve(ICurve):
       
     def get_rate(self, date: date) -> float:
         if date not in self.cache:
-            self.cache[date] = self.inner_yc.get_yc_rate(self.as_of_date, date)
+            self.cache[date] = self.inner_yc.get_yc_rate(self.as_of_date, date) / 100
         return self.cache[date]
     
 #SATODO: ad test
