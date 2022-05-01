@@ -127,9 +127,9 @@ class VolSurfaceBase(ISurface):
         data['Expiration'] = pd.to_datetime(data['Expiration'])
         
         all_vols = data[data['DataDate'].dt.date == self.as_of_date]
-        put_vols = all_vols[all_vols['Type'] == "put"]
+        vols_averaged_for_puts_and_calls = all_vols.groupby(by=['Expiration', 'Strike']).mean().reset_index()
         
-        self.create_interpolators(put_vols)
+        self.create_interpolators(vols_averaged_for_puts_and_calls)
         
         elapsed_time = time.process_time() - t
         

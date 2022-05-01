@@ -15,6 +15,7 @@ from pde_pricer import *
 from shared_constants import test_as_of_date
 from shared_constants import test_expiry_date
 from payoff_test import MockDiscountedPayoff
+from daycount import *
 
 import math
 from scipy.stats import norm
@@ -41,7 +42,8 @@ def price_it():
     spot = 1482.25
     strike = 1340
     max_spot_mult = 2
-    expiry_year_fraction = 0.97
+    expiry_date = date(2021,1,15)
+    expiry_year_fraction = calc_year_fraction_from_dates(as_of_date, expiry_date)
     vol = 0.2417
     
     curve = YieldCurve(as_of_date)
