@@ -36,6 +36,9 @@ def BlackScholesCall(k: float, r: float, s: float, vol: float, t: float) -> floa
     return pv
 
 def price_it():
+    bid = 62.5
+    ask = 72.5
+    
     n_time_values = 100
     n_spot_values = 100
     as_of_date = date(2020, 1, 21)
@@ -44,7 +47,6 @@ def price_it():
     max_spot_mult = 2
     expiry_date = date(2021,1,15)
     expiry_year_fraction = calc_year_fraction_from_dates(as_of_date, expiry_date)
-    vol = 0.2417
     
     curve = YieldCurve(as_of_date)
     
@@ -56,7 +58,32 @@ def price_it():
     pricer = PdePricer(discounted_payoff, surface, curve, grid)
     
     pv = pricer.price()
-    print(f"PV = {pv}")
+    print(f"PV = {pv}, bid={bid}, ask={ask}")
+    
+def price_it2():
+    bid = 59.5
+    ask = 69.5
+    
+    n_time_values = 100
+    n_spot_values = 100
+    as_of_date = date(2020, 1, 21)
+    spot = 1482.25
+    strike = 1330
+    max_spot_mult = 2
+    expiry_date = date(2021,1,15)
+    expiry_year_fraction = calc_year_fraction_from_dates(as_of_date, expiry_date)
+    
+    curve = YieldCurve(as_of_date)
+    
+    surface = VolSurfaceBase("GOOGL", as_of_date)
+    payoff = PutPayoff(strike)
+    discounted_payoff = DiscountedPayoff(payoff, curve)
+    
+    grid = PdeGrid(expiry_year_fraction, n_time_values, spot, max_spot_mult, n_spot_values)
+    pricer = PdePricer(discounted_payoff, surface, curve, grid)
+    
+    pv = pricer.price()
+    print(f"PV = {pv}, bid={bid}, ask={ask}")
 
 def price_it_with_bs():
     n_time_values = 100
@@ -98,4 +125,5 @@ def rate_test():
     
 #price_it_with_bs()
 price_it()
+price_it2()
 #rate_test()

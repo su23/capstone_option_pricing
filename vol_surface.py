@@ -46,9 +46,6 @@ class VolSurface(ISurface):
         
     #TODO: implement properly
     def get_vol(self, date: date, spot: float) -> float:
-    #TODO: Ideally we should use US trading calendar, not just weekends here
-        if date.weekday() > 4:
-            return 0
         return 0.15
     
     def get_vol_yf(self, year_fraction: float, spot: float) -> float:
@@ -68,9 +65,6 @@ class VolSurfaceBase(ISurface):
 
 
     def get_vol(self, date: date, spot: float) -> float:
-        if date.weekday() > 4:
-            return 0
-
         np_date = np.datetime64(date)
        
         
