@@ -98,8 +98,6 @@ def dump_vol_surface():
 
     for d in range(1, 365*2):    
         cur_date = as_of_date + timedelta(days=d)
-        if cur_date.weekday() > 4:
-            continue
         for s in range(500, 2000, 10):
             yf = d / 365.25
             vol = surface.get_vol_yf(yf, s)
