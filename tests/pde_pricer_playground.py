@@ -6,15 +6,16 @@ sys.path.append('../')
 
 from datetime import date
 from yc import YieldCurve
+from yc import MockYieldCurve
 from vol_surface import VolSurface
 from vol_surface import VolSurfaceBase
+from vol_surface import MockVolSurface
 from payoff import PutPayoff, CallPayoff, DiscountedPayoff
 from pde_pricer import *
 from shared_constants import test_as_of_date
 from shared_constants import test_expiry_date
 from payoff_test import MockDiscountedPayoff
-from vol_surface_test import MockVolSurface
-from yc_test import MockYieldCurve
+
 import math
 from scipy.stats import norm
 

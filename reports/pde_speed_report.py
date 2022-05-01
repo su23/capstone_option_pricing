@@ -7,13 +7,15 @@ sys.path.append('../tests')
 
 from datetime import date
 from yc import YieldCurve
+from yc import MockYieldCurve
 from vol_surface import VolSurface
+from vol_surface import MockVolSurface
 from payoff import PutPayoff, CallPayoff, DiscountedPayoff
 import pandas as pd
 from pde_pricer import *
 import time
-from yc_test import MockYieldCurve
-from vol_surface_test import MockVolSurface
+
+
 
 
 as_of_date = date(2014, 1, 20)
@@ -102,7 +104,7 @@ def spot_and_time_grids_dependency_test():
         
     
 time_grid_dependency_test()
-#time_grid_dependency_test_const_rate()
-#time_grid_dependency_test_const_vol()
-#spot_grid_dependency_test()
-#spot_and_time_grids_dependency_test()
+time_grid_dependency_test_const_rate()
+time_grid_dependency_test_const_vol()
+spot_grid_dependency_test()
+spot_and_time_grids_dependency_test()

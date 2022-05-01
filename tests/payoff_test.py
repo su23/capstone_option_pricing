@@ -139,7 +139,7 @@ def test_custom_mock_payoff():
 def test_discounted_payoff():
     # arrange
     payoff = MockPayoff(11)
-    curve = MockYieldCurve(0.42, 0.11)
+    curve = MockYieldCurve(0.42, 0.11, test_as_of_date)
     
     disc_payoff_obj = DiscountedPayoff(payoff, curve)
     
@@ -156,7 +156,7 @@ def test_discounted_payoff():
 def test_discounted_payoff_by_year_fraction():
     # arrange
     payoff = MockPayoff(11)
-    curve = MockYieldCurve(0.42, 0.11)
+    curve = MockYieldCurve(0.42, 0.11, test_as_of_date)
     
     disc_payoff_obj = DiscountedPayoff(payoff, curve)
     
@@ -190,7 +190,7 @@ def test_discounted_payoff_by_year_fraction_real_yield_curve():
 def discounted_payoff_returns_curves_as_of_date():
     # arrange
     payoff = MockPayoff(11)
-    curve = MockYieldCurve(0.42, 0.11)
+    curve = MockYieldCurve(0.42, 0.11, test_as_of_date)
     
     disc_payoff_obj = DiscountedPayoff(payoff, curve)
    

@@ -7,29 +7,6 @@ from datetime import date
 from shared_constants import test_as_of_date
 from yc import *
 
-class MockYieldCurve(ICurve):
-    def __init__(self, const_disc_fact: float=0.9, const_rate: float=0.01, as_of_date: date = test_as_of_date):
-        self.const_disc_fact = const_disc_fact
-        self.const_rate = const_rate
-        self.as_of_date = as_of_date
-      
-    def get_rate(self, date: date) -> float:
-        return self.const_rate;
-    
-    def get_rate_yf(self, year_fraction: float) -> float:
-        return self.const_rate;
-    
-    def get_disc_fact(self, date: date) -> float:
-        return self.const_disc_fact;
-    
-    def get_disc_fact_yf(self, year_fraction: float) -> float:
-        return self.const_disc_fact;
-    
-    def get_as_of_date(self) -> date:
-        return self.as_of_date
-
-
-
 def yc_rate_tests():
     # arrange
     c = UnbasedYieldCurve()
@@ -120,7 +97,7 @@ def yc_default_mock_tests():
     # arrange
     
     a_date = date(2022, 4, 10)
-    mock = MockYieldCurve()
+    mock = MockYieldCurve(0.9, 0.01, test_as_of_date)
     
     # act
     df = mock.get_disc_fact(a_date)
@@ -134,7 +111,7 @@ def yc_semi_default_mock_tests():
     # arrange
     
     a_date = date(2022, 4, 10)
-    mock = MockYieldCurve(0.42)
+    mock = MockYieldCurve(0.42, 0.01, test_as_of_date)
     
     # act
     df = mock.get_disc_fact(a_date)
@@ -148,7 +125,7 @@ def yc_custom_mock_tests():
     # arrange
     
     a_date = date(2022, 4, 10)
-    mock = MockYieldCurve(0.42, 0.11)
+    mock = MockYieldCurve(0.42, 0.11, test_as_of_date)
     
     # act
     df = mock.get_disc_fact(a_date)
@@ -162,7 +139,7 @@ def yc_default_mock_tests_year_fraction():
     # arrange
     
     a_date = date(2022, 4, 10)
-    mock = MockYieldCurve()
+    mock = MockYieldCurve(0.9, 0.01, test_as_of_date)
     
     # act
     df = mock.get_disc_fact_yf(100)
@@ -173,7 +150,7 @@ def yc_default_mock_tests_year_fraction():
     
 def mock_curve_returns_test_as_of_date():
     # arrange
-    curve = MockYieldCurve()
+    curve = MockYieldCurve(0.9, 0.01, test_as_of_date)
     
     # act
     actual = curve.get_as_of_date()

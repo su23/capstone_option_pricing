@@ -7,21 +7,6 @@ from datetime import date
 from shared_constants import test_as_of_date
 from vol_surface import *
 
-class MockVolSurface(ISurface):
-    def __init__(self, const_vol: float, as_of_date: date = test_as_of_date):
-        self.const_vol = const_vol
-        self.as_of_date = as_of_date
-        
-    #TODO: implement properly
-    def get_vol(self, date: date, spot:float) -> float:
-        return self.const_vol
-    
-    def get_vol_yf(self, year_fraction: float, spot: float) -> float:
-        return self.const_vol
-    
-    def get_as_of_date(self) -> date:
-        return self.as_of_date
-
     
 #TODO: implement properly once VolSurface is properly implemented
 def vol_surface_returns_something():
@@ -87,7 +72,7 @@ def mock_vol_surface_returns_const():
     const_vol = 0.01
     a_date = date(2022, 4, 10)
     a_spot = 100500
-    surface = MockVolSurface(const_vol)
+    surface = MockVolSurface(const_vol, test_as_of_date)
     
     # act
     vol = surface.get_vol(a_date, a_spot)
@@ -97,7 +82,7 @@ def mock_vol_surface_returns_const():
     
 def mock_vol_surface_returns_test_as_of_date():
     # arrange
-    surface = MockVolSurface(42)
+    surface = MockVolSurface(42, test_as_of_date)
     
     # act
     actual = surface.get_as_of_date()

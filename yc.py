@@ -95,6 +95,27 @@ class ICurve:
         """Returns base date of the curve"""
         pass
 
+class MockYieldCurve(ICurve):
+    def __init__(self, const_disc_fact: float, const_rate: float, as_of_date: date):
+        self.const_disc_fact = const_disc_fact
+        self.const_rate = const_rate
+        self.as_of_date = as_of_date
+      
+    def get_rate(self, date: date) -> float:
+        return self.const_rate;
+    
+    def get_rate_yf(self, year_fraction: float) -> float:
+        return self.const_rate;
+    
+    def get_disc_fact(self, date: date) -> float:
+        return self.const_disc_fact;
+    
+    def get_disc_fact_yf(self, year_fraction: float) -> float:
+        return self.const_disc_fact;
+    
+    def get_as_of_date(self) -> date:
+        return self.as_of_date
+
 
 class YieldCurve(ICurve):
     inner_yc = UnbasedYieldCurve()

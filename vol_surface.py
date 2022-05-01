@@ -21,6 +21,22 @@ class ISurface:
     def get_as_of_date(self) -> date:
         """Returns base date of the surface"""
         pass
+    
+class MockVolSurface(ISurface):
+    def __init__(self, const_vol: float, as_of_date: date):
+        self.const_vol = const_vol
+        self.as_of_date = as_of_date
+        
+    #TODO: implement properly
+    def get_vol(self, date: date, spot:float) -> float:
+        return self.const_vol
+    
+    def get_vol_yf(self, year_fraction: float, spot: float) -> float:
+        return self.const_vol
+    
+    def get_as_of_date(self) -> date:
+        return self.as_of_date
+
 
     
 class VolSurface(ISurface):
@@ -68,19 +84,20 @@ class VolSurfaceBase(ISurface):
             result = self.interpolators[self.expiry_days_sorted[-1]](spot)
             #print(f"Old = {old_result}, new result = {result} (Extrap+)")
             return result
+        
+        
+        left_idx = np.searchsorted(self.expiry_days_sorted, np_date)
+        
+        prev_exp = self.expiry_days_sorted[left_idx-1]
+        #print(f"{left_idx} {np_date} {self.expiry_days_sorted[-1]} {self.expiry_days_sorted}")
+        next_exp = self.expiry_days_sorted[left_idx]
+        
+        prev = self.interpolators[prev_exp](spot)
+        next = self.interpolators[next_exp](spot)
+                
+        ratio = (np_date - prev_exp)/(next_exp - prev_exp)
+        result = prev + (next - prev) * ratio
 
-        prev_exp = self.expiry_days_sorted[0]
-        for next_exp in self.expiry_days_sorted:
-            if (prev_exp < np_date and np_date <= next_exp):
-                prev = self.interpolators[prev_exp](spot)
-                next = self.interpolators[next_exp](spot)
-                
-                ratio = (np_date-prev_exp)/(next_exp-prev_exp)
-                #print(f"R: {ratio}: {prev_exp}, {np_date}, {next_exp}")
-                
-                result = prev + (next - prev) * ratio
-                break;
-            prev_exp = next_exp
         return result
 
     def get_vol_yf(self, year_fraction: float, spot: float) -> float:
