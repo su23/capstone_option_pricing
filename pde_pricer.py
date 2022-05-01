@@ -72,11 +72,11 @@ class PdePricer:
             pv_s_max = self.grid.get_pv(max_s_index, t_idx)
             a[0, 0]=1
             b[0]=pv_s0
-            vol = self.surface.get_vol_yf(t, self.payoff.get_strike())
             #print(f"X0={pv_s0}")
             
             for spot_idx in range(1, max_s_index):
                 s = self.grid.get_spot_for_index(spot_idx)
+                vol = self.surface.get_vol_yf(t, s)
                 pv_t_plus_1 = self.grid.get_pv(spot_idx, t_idx+1)
                 
                 s_minus_1_coeff = (r*s - (vol**2)*(s**2.0)/dS)/(2*dS)

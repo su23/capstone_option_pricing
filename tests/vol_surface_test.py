@@ -104,6 +104,24 @@ def mock_vol_surface_returns_test_as_of_date():
     
     # assert
     assert actual == test_as_of_date, f"Expected AsOfDate {test_as_of_date} but got {actual}"
+    
+def dump_vol_surface():
+    as_of_date = date(2020, 1, 21)
+    surface = VolSurfaceBase("GOOGL", as_of_date)
+    
+    result = pd.DataFrame()
+
+    for d in range(1, 365*2):    
+        cur_date = as_of_date + timedelta(days=d)
+        if cur_date.weekday() > 4:
+            continue
+        for s in range(500, 2000, 10):
+            yf = d / 365.25
+            vol = surface.get_vol_yf(yf, s)
+            result.at[s,d]=vol
+    print(result)
+    result.to_csv("vol_surface.csv")
+
         
     
 def all_vol_surface_tests():
@@ -112,6 +130,7 @@ def all_vol_surface_tests():
     vol_surface_returns_as_of_date()
     mock_vol_surface_returns_const()
     mock_vol_surface_returns_test_as_of_date()
+    dump_vol_surface()
     
     
 all_vol_surface_tests()
