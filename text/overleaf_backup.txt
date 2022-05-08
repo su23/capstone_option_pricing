@@ -1,0 +1,763 @@
+%% This is file `elsarticle-template-1-num.tex',
+%%
+%% Copyright 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%%
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%%
+%% $Id: elsarticle-template-1-num.tex 149 2009-10-08 05:01:15Z rishi $
+%% $URL: http://lenova.river-valley.com/svn/elsbst/trunk/elsarticle-template-1-num.tex $
+%%
+\documentclass[preprint,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% if you use PostScript figures in your article
+%% use the graphics package for simple commands
+%% \usepackage{graphics}
+%% or use the graphicx package for more complicated commands
+%% \usepackage{graphicx}
+%% or use the epsfig package if you prefer to use the old commands
+%% \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+\usepackage{lineno}
+
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{float}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{pdfpages}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+
+\journal{Capstone project in Quant University}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\title{Project Proposal: Practical aspects of American option pricing Implementation}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author{Alexander Sazonov}
+%%\address{aleksandr.sazonov@gmail.com}
+\author{Alexander Ulanov}
+%%\address{alexander.ulanov@gmail.com}
+\author{Vyacheslav Tsarev}
+%%\address{slava.tsarev@gmail.com}
+
+
+\begin{abstract}
+%% Text of abstract
+Considering an implementation of options pricer, one might think about volatility models, pricing methods, underlying price models, multi-factor stochastic models, modelling interest rates, implying the data from the available market data and option types. All of the above are interconnected and thus choices to be made are correlated. It is not always clear how a choice of one of the above would affect other choices and what limitations it would introduce. Additionally, the theoretical foundation is important and necessary, but the first steps towards practical implementation may be cumbersome, so it is important to show how the theoretical choices transform to an exact implementation.
+\end{abstract}
+
+\begin{keyword}
+Option Pricing \sep Black Scholes \sep PDE \sep Monte-Carlo \sep Complicated
+%% keywords here, in the form: keyword \sep keyword
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+
+%% main text
+\section{Goals and Objectives}
+\label{S:1}
+
+The project goals are:
+\begin{itemize}
+\item To provide an overview of the choices to be made when implementing an options pricer
+\item To implement an option pricer for a particular set of choices (pricing method, volatility model, option type, etc)
+\end{itemize}
+
+The objectives are:
+\begin{itemize}
+\item To put together a high-level overview of existing option types, volatility models and option pricing methods, highlighting their dependencies and applicability
+\item To explain what choices have to be made when implementing an options pricer
+\item To choose a particular volatility model and calibrate it to listed equity option market data
+\item For a chosen option type to implement applicable pricing method(s), using the market data and calibrated volatility models
+\item To validate the resulting prices using historical option prices for listed equity options, observed in the market
+\end{itemize}
+
+As we are going to explore and describe the required choices on our way, we are not yet certain which actual choices we’ll make for the practical part of the task where we are going to illustrate the choices made and provide a corresponding options pricer implementation, but our initial thinking (feasibility to be confirmed) is:
+
+\begin{itemize}
+\item We would like to focus on listed American Equity options, as we already have a large set of data for those, including prices and implied volatilities
+\item A simplistic implementation of local volatility model with linear interpolation, calibrated to implied volatilities observed in the equity options market, for the most liquid asset and a pricing date where we have most data
+\item A Monte-Carlo pricing method, implemented in Python
+\item A finite difference pricing method, also implemented in Python
+\end{itemize}
+
+Given we already have market option prices for American Equity options and associated implied volatilities, and assuming we can get a reliable source of interest rate and forward curves for the assets we choose, we should also be able to compare both the performance and precision of our models with various lattice settings.
+
+\section{Introduction}
+An option is a financial contract that gives the option’s holder the right, but not the obligation, to buy or sell an underlying financial instrument for a given price, which is called the strike price of an option. There are various types of options, but the most common ones are European Option and American Option. The difference between them will be described later. Options could basically be a call or a put option. A call option gives a holder the right to buy the underlying asset whereas a put option gives a holder the right to sell the underlying asset. Such options are standard and therefore often called vanilla options. Calls and puts - both have an expiry date or option maturity. The difference between them is that European Option could be executed only at the end of the option’s maturity, but then American option could be executed at any time when option is valid. All other option types are called exotics. Some examples of them are - Russian options, Asian options, barrier options, binary options \cite{hull}.
+
+Options are a very useful tool for hedging the risks and leveraging positions. But, at the same time evaluation of option  price is highly technical and entering option positions without adequate knowledge may lead to money losses. The complex nature of options makes them difficult to price. As a result we need a constant focus on accurate option pricing.
+
+Option pricing involves market price, strike price, volatility, interest rate to determine the option’s premium. But the focal point is how to determine volatility for better pricing. The problem of pricing an American option could be re-phared as how to find an optimal time point option execution, which can be stated as a "free boundary problem"\cite{Agarwal}. The binomial lattice method of Cox et al. \cite{cox} is a popular numerical method in the constant volatility situation. Brennan and Schwartz developed an approximation approach in which the free boundary problem is solved numerically \cite{brennan}. Carr developed the "maturity randomization" technique, in which he replaced  American option's fixed maturity with random variables matching to the arrival times of an independent Poisson process \cite{carr}. The price of this converted option is solved by the partial differential equation (PDE), which can be solved explicitly for every occurrence of "maturity randomization". After that, solutions of those PDEs are then used to estimate the price of original American option. Such approximation is called as Canadization method and it was later proved that it converges to the true value of American Option \cite{bouchard}. Also this method can be used to price Russian options \cite{duistermaat}, \cite{kleinert}, \cite{kyprianou}.
+
+Another approach is to use simulation methods. Simulation methods are often used to solve discretized verions of option pricing problem.  The idea is to simulate all fixed times when option excercise could happen. And here we would get the limit when number of exercise times goes to infinity, the actual price converges to the true value. This limit is also called as continuation value function. One of  common approaches among simulation methods is to use Monte Carlo simulation for each option's exercise timestamps and then use the average payoff on those exersised samples as an estimate of true American option price. Broadie and Glasserman \cite{broadie} shows that random tree method also could be used for simulation. In their next work \cite{broadie2} they also present stochastic mesh method. Idea of this method is to calculate weighted-average of likelihood ratio over simulated paths.
+
+Despite Monte Carlo techniques show true rate, their convergence is quite slow. Longstaff and Schwartz proposed a quicker solution for simulation methods by adopting least squares regression method. In this solution continuation value function will be formed as a linear combination of basis functions \cite{longstaff}. Despite this method being approximate, but has become quite popular becuase of its convergency speed. Often it is used as a quick benchmark of American option price. 
+
+There are not a lot methods were implemented when reviewing American option pricing in stochastic volatility setting. We can categorize current methods as PDE and non-PDE based methods. The PDE based methods are typically represented as (at least three-dimensional) free boundary problems. One typical solution is to reformulate the problem as a linear complementarity problem. Ikonen and Toivanen proposed two solutions for that: first is to use operator splitting methods \cite{Ikonen}, and second is to use component-wise splitting methods \cite{Ikonen2}. These methods in the same way as Monte Carlo simulation are time-consuming. In non-PDE methods, there is a solution from Longstaff-Schwartz method which is based on using  cross-sectional basis functions \cite{Rambharat}.
+
+\section{Numerical PDE pricing}
+Numerical PDE solving methods are widely used in practice for many types of options. To exploit the idea one needs a PDE containing at least the underlying price function S and an option price function $P(S, t,...)$, which would depend on $S$ and time $t$. An $(S, t)$ lattice would normally be built (with equal or non-equal steps along each axis). In addition to the PDE itself, boundary conditions are normally needed to solve PDEs, including numerical case. For options normally one of more conditions are used for option expiry time $t=T$, when the option payoff is usually known. Other common conditions are for $S=0$ and when $S$ tends to infinity. For instance, a put option would be worthless with large values of $S$ and a call option would we worthless with $S=0$ \cite{hull}.
+
+Given the PDE, lattice and boundary conditions the usual procedure would be to start at $t=T$ and compute values "from left to right" for $t-1$, $t-2$, ... $t=0$. Then the value at $(S0, t=0)$ would be considered the option price \cite{hull}.
+
+\subsection{American put SDE}
+In relation to American options, we have examined \cite{Meyer}, which actually focuses on numerical methods for finding a price of an American option using a PDE, involving the underlying price, option price and an exercise boundary as a stopping condition, as for an American option we have it as a boundary condition.
+
+Most works will be looking at American puts, as an early exercise is never optimal for an American call (for an underlying without dividends) \cite{Merton}.
+
+Considering Black-Scholes world, the author provides this equation for an American put
+$$
+\frac{1}{2}\sigma^2 S^2 P_SS + rSP_S-rP+P_t=0
+$$
+
+Here $\sigma$ is a (constant) underlying process volatility, $S$ is the value of underlying, $t$ is time, $P(S,t)$ is the value of the American put option and $r$ is a risk-free interest rate. 
+
+The authors also use $S(t)$ to denote the unknown exercise boundary – a value of $S$ at time $t$ which, if reached, would trigger an exercise of the option. As they deal with a put option – a right to sell, this means we should sell if $S$ at time $t$ is equal or greater than $S(t)$ as obviously the option holder wouldn’t hesitate to sell for a bigger price if possible.
+
+The boundary conditions the authors provide are:
+
+\begin{equation}\nonumber
+\begin{split}
+&\lim_{S \to \infty} P(S,t) = 0\\
+&P(S(t),t)=K-S(t)\\
+&P_S(S(t), t)=-1
+\end{split}
+\end{equation}
+
+The first one simply reminds us that a put option is worthless if spot price is very high already – we wouldn’t want to sell an asset for K if current spot price S is larger than $K$, and if $S$ tends to infinity the chances of $S$ ever getting below $K$ tend to $0$.
+
+The second one is the payoff condition at exercise – if $S$ becomes equal to (the unknown) exercise boundary $S(t)$ then the option is exercised and its payoff (and thus price at time $t$) directly follows from the American call option definition: $K – S(t)$
+
+And the third condition tells us that at exercise the put’s delta is $-1$, same as a delta for short forward.
+
+There are also two conditions at maturity $T$:
+$$
+P(S,T)=\max\{(K-S), 0\}
+$$
+
+This denotes the put option payoff at its expiry time $T$, which is the same as its price at expiry time $T$.
+
+The second condition is for the exercise boundary at expiry time $T$ – clearly it is worth exercising an American put at its expiry time $T$ if and only if spot price is equal or below its strike K, hence the exercise boundary is simply 
+
+$$
+S(T)=K
+$$
+
+\subsection{Numerical PDE methods for American options}
+In their work \cite{Zhou}, the authors use CEV model for the underlying price and pay attention to finite difference methods for pricing American options. To build the lattice they suggest choosing a large enough spot value $S_max$, so that the option value $P(S_max, t)$ is very close to zero for all $t$ between $0$ and expiry time $T$. Then they choose $N$ – a number of steps for the $S$ dimension, so that a lattice step is $S_max /N$. Similarly, they use discrete time axis with steps of $T/M$, $M$ being the number of points in the time dimension. Using the resulting lattice, they "go backwards in time" while calculating the exercise boundary, which they later use to calculate the American put option price.
+
+The author of \cite{Benbow} also considers a free boundary problem, where free boundary is the exercise boundary where exercise becomes optimal for an American put option: "This is what is known as a free boundary problem. At each time t there is a particular value of S which marks the boundary between two regions: to one side one should hold the option and to the other side one should exercise it.". In this work it is called an "optimal exercise price". This work also adds an additional complication, by considering dividend-paying underliers.
+
+Finite difference method in this work also considers a lattice with underlying price and time dimensions, as most if not all methods would do for American options.
+
+The work \cite{Hjelmberg} provides the most explicit description of a finite difference algorithm to calculate the price of an American put option. They explain in simple terms that finite difference methods work "right to left" on the time axis, starting with a payoff function at exercise time T and eventually arriving at $P(S_0, t_0)$, which is considered the correct price for an option. If the lattice is built that $(S_0,t_0)$ point is not present in it (most likely because $S_0$ is not one of the lattice values for the underlying), the authors argue that a linear interpolation of two adjacent underlying price points can be used. Then it will be a matter of choosing the right $N$ (the number of points on the underlying axis of the lattice) to get the appropriate precision, although obviously N has an effect on the main calculation’s precision too, not just the final interpolation of price at $S_0$. The authors also discuss using non-constant volatility here i.e. using $\sigma(S^*,t)$ where $S^*$ is some sort of a function of $S$ e.g. $S$ itself or moneyness $S/K$ or $ln(S)$. Considering American options, the authors explore what they call Early Exercise Boundary (EEB) here, and use it in their calculations. They also refer to Hull’s \cite{hull} idea of NOT calculating EEB at all and just moving on to calculate option prices at all nodes as if the option was European and then increasing the resulting price accordingly.
+
+The authors of \cite{Hjelmberg} also discuss implicit, explicit and Crank-Nicolson methods of calculating the option price values as they iterate over the lattice nodes in a time-decreasing fashion. For instance, for the implicit method they use 
+
+$$
+\frac{f_{i+1,j}-f_{i,j}}{\Delta t} + rj \delta S \frac{f_{i,j+1}-f_{i,j-1}}{2\Delta S} + \frac{1}{2} \sigma^2 j^2 \Delta S^2 \frac{f_{i,j+1}-f_{i,j-1}-2f_{i,j}}{\Delta S^2}=rf_{i,j}
+$$
+
+where $f_{i,j}$ is the option price at time-axis coordinate $i$ and asset-price lattice coordinate $j$.
+
+
+\subsection{Competitor Analysis}
+In terms of SWOT analysis of competing option pricing methods, we can compare and contrast three option pricing methods, most commonly used in investment banks and other financial institutions. These are closed-form solutions, PDE numerical pricing and Monte-Carlo simulations \cite{Jahnke}.
+
+
+\subsubsection{Closed-form}
+Closed-form solutions most commonly employ Black-Scholes price formula. The benefits of this approach are:
+\begin{itemize}
+\item Calculation speed – calculating an analytical formula is usually fast and Black-Scholes formula can be efficiently implemented even in Excel
+\item Rather simple market data requirements – we do not need complex volatility surfaces, correlations, etc, all we need is a spot, a forward, a discount factor, one scalar value of volatility and time \cite{Neftci}
+\item A rather intuitive implementation without a need for many settings and tweaks.
+\end{itemize}
+The flaws are:
+\begin{itemize}
+\item Black-Scholes formula should only be applied to a very limited set of options, normally only European options \cite{hull}.
+\end{itemize}
+
+\subsubsection{Numerical PDE solving}
+While the SDEs are normally used to describe the evolution and underlying asset and option price \cite{Wiersema}, a PDE method is frequently used to actually price options.
+
+PDE-based methods have the following benefits:
+\begin{itemize}
+\item This approach is applicable to a wider range of options than Black-Scholes
+\item The approach is reasonably performant, as only one iteration over the lattice is required.
+\end{itemize}
+The flaws are:
+\begin{itemize}
+\item For some options (notably barrier ones) numerical PDE solving approach may produce unstable results \cite{Boyle}
+\item Numerical PDE solving approach requires some settings, at least the lattice ones
+\item A separate PDE pricer has to be implemented for nearly every product, as the dynamics is different for all different kinds of options.
+\end{itemize}
+
+\subsubsection{Monte-Carlo}
+The benefits for Monte-Carlo pricing are:
+\begin{itemize}
+\item A very powerful method, applicable to most options
+\item Parts of implementation can be efficiently shared for different options
+\end{itemize}
+Flaws:
+\begin{itemize}
+\item Computations can take a long time
+\item Has a rather large number of settings (e.g. lattice settings)
+\item May need stability tweaks for some particular kinds of options – notably barrier options may require some extra logic to make computations more stable when the forward value is close to the barrier.
+\end{itemize}
+
+\section{Design}
+\subsection{Approach}
+Out topic is "Practical aspects of American option pricing Implementation", so our approach will be to show both:
+\begin{itemize}
+\item The choices one has to make when implementing an options pricer and
+\item Actually implementing one.
+\end{itemize}
+We will try to give a rather broad analysis on the first one without too many technical details. We should mention at least:
+\begin{enumerate}
+\item Option classes used in the market
+\item Available underlying/volatility models, including single and multi-factor ones
+\item The available pricing methods
+\item A connection between (1), (2) and (3)
+\end{enumerate}
+
+This should cover the "how do I start" part of our work, describing choices to be made from a more or less layman perspective.
+
+For the second part of the work, we are going to actually demonstrate how one can implement a working pricer for some non-trivial option type, volatility model and pricing method(s). Our intended choices are a no-dividend American equity option, Local Volatility Model and numerical PDE pricer, accompanied by a simplistic Monte-Carlo pricer.
+
+\subsection{Methodology}
+For the first part of our work, we’d like to show which choices one has to make in order to start implementing an options pricer.
+
+A breakdown of this is:
+\begin{enumerate}
+\item A rough categorisation of options by classes looking to give applicability matrix of models/methods for the classes we mention later
+\item The available choices of underlying model and its volatility
+\begin{enumerate}
+\item Black-Scholes model (single-factor, constant volatility)
+\item Local volatility model
+\item Stochastic volatility models (e.g., Heston), 2-factor
+\item Stochastic rates model (2-factor)
+\item Some possible blends of the above e.g., Stoch Vol + Local Vol
+\end{enumerate}
+\item The available pricing methods overview: 
+\begin{enumerate}
+\item Closed form solutions
+\item Numerical PDEs solving
+\item Monte-Carlo
+\end{enumerate}
+\item An applicability matrix of models to options classes identified in (1). This can be based on lecture materials by Frédéric Bossens, presented at the Financial Engineering Workshop in London Cass Business School on Dec 4 2019, which we possess. We should also mention methods applicability
+\item Additional considerations of how the following might complicate development:
+\begin{enumerate}
+\item Interest rate curves
+\item Dividends
+\end{enumerate}
+\end{enumerate}
+
+The second block is actually showing what some of the things mentioned above mean in practice. Our intent is to implement one or two pricers for American options using a simplistic version of the Local Volatility Model. The choice is based partially on the data we have purchased from Historical Option Data \footnote{https://www.historicaloptiondata.com/} , which contains among other things Equity American option data which for multiple equity names includes Underlying Price, Expiry Date, Strike, Implied Volatility, Bid and Ask option prices. One thing we are still missing is interest rates though, so we’ll have to find a source of historical interest rates for USD which is hopefully not too hard to do.
+We plan to pick one “as of” date and one no-dividend USD-denominated equity name where we have more data than in the other cases. Then we plan to build a strike-based Local Vol Model using the data we have – we can first use some simple (linear in the beginning and adding some smoothing if linear does not produce good results) interpolation of option implied vols for every expiry dates we have, thus obtaining a set of volatility smiles per known expiry date, and then interpolate linearly between dates.
+
+We also plan to implement a numerical PDE solver for an American option, with variable lattice settings and without using an explicit exercise boundary, and rather just taking a maximum discounted payoff as suggested in \cite{hull} as we go back in time.
+
+Another method we are going to explore is Monte-Carlo, which, according to our research, is actually harder to implement than a numerical PDE solver, as for every generated underlying path we cannot simply “take a look at the future numbers” at each point in time and get a maximum of discounted payoffs across all points, as this accounts to using a time machine which a potential investor wouldn’t possess in reality, thus introducing a bias. Still, as our goal is to show practical aspects of option pricing work, we can implement a rather simple version of Monte-Carlo method and point to mistakes and potential improvements.
+
+Our implementation is going to be in Python. We should first define an API for our local volatility model and provide a stub constant volatility model to allow for parallel development of the volatility model and pricing methods.
+
+\subsection{Desired Outcomes}
+We intend to provide a comprehensive, but not too deep analysis of the choices one has to make when she starts working on an options pricer in the first part of our work. The reader is meant to understand what decisions are to be made before a pricer can be implemented, and have a good understanding of the implications of her choices.
+
+For the second part we are going to use American option prices we have as a benchmark for the quality of our pricer(s). Given we are going to use a rather simplistic Local Volatility model implementation, we should see some differences, but at the same time the relative price differences can be compared for different options and are expected to be in line with a reasonable tolerance. We expect to be able to provide result tables showing how prices precision and performance depend on the lattice settings chosen. A Black-Scholes formula price for an average volatility value for every given price can also be used as a sort of benchmark, especially for call options where early exercise normally does not make sense \cite{Merton}.
+
+Finally, we would expect to confirm the common options industry approach to American options pricing where numerical PDE solving is preferred to Monte-Carlo simulations due to performance and code complexity (or, alternatively, results precision) reasons.
+
+\subsection{Intended Working Plan}
+The initial phase would be to create a shared Python project with some simple APIs and dummy implementations:
+\begin{itemize}
+\item A simplistic API for a Local Volatility Model: a class providing a \texttt{GetVol(boolean callIfTrueElsePut, Date, strike)} method
+\item A dummy implementation of such class which would take a single constant volatility value as its only constructor parameter
+\item Define an API for a USD yield curve: a class with a \texttt{GetRate(date)} and \texttt{GetDiscountFactor(date)} methods
+\item Implement a dummy yield curve class with a constant interest rate and a matching discount factor (continuous compounding)
+\end{itemize}
+
+The other tasks can mostly be done in parallel:
+\begin{itemize}
+\item Analyse the source data we have and pick 1 USD-denominated equity name where it pays no dividends and has the biggest number of points for puts (calls are not of massive interest for us but we’d love to look at them too to compare with Black-Scholes results). Then pick up an “as of” date with the biggest number of points
+\begin{itemize}
+\item Find a USD interest rate curve for the chosen security, with the chosen "as of" date
+\end{itemize}
+\item Implement a Local Volatility Model assuming we have (possibly sparse) grid of volatilities for expiry-strike pairs. The model should be able to interpolate in strike space for every expiry date is possesses and then linearly interpolate in date space, taking two smile values for a given strike as pillar point values for 2 dates adjacent to a date required by the caller
+\begin{itemize}
+\item Add a GetAverageVol(strike) method to use with Black-Scholes tests
+\item Implement tests
+\end{itemize}
+\item Implement a simplistic Yield Curve (probably by simply using linear interpolation) which can be constructed from a vector of (Date, rate) pairs
+\begin{itemize}
+\item Implement tests
+\end{itemize}
+\item Implement numerical PDE solver with separate Date and Strike lattice frequencies as parameters. The implementation should assume we already have a Local Volatility Model and a Yield Curve.
+\begin{itemize}
+\item Implement tests
+\end{itemize}
+\item Implement Monte-Carlo solver with rather simplistic assumptions. First version may simply calculate the maximum discounted payoff for every point in time. If we have time, remove the usages of "time machine" and use a more robust approach to making an exercise decision.
+\begin{itemize}
+\item Implement tests
+\end{itemize}
+\end{itemize}
+
+Once the steps above are completed, we can use the data we chose for Local Volatility Model and USD Yield Curve to actually build a Volatility Model and a Curve. Using the strikes and expiry dates for the same “as of” date and asset, we should compute option prices and compare them to those observed in the market, for numerical PDE method, Monte-Carlo method and Black-Scholes formula. The first two may use different lattice settings to balance speed vs quality.
+
+We should then write a report, showing the following slices of results:
+
+\begin{itemize}
+\item Price precision per method, comparing prices we get to those seen in the market on the same "as of" date
+\item Price convergence per method, depending on lattice settings, per method
+\item Computation time depending on lattice settings, per method
+\item A sanity check results where we would use Black-Scholes formula for American Call options, using an average volatility, and compare those to market prices, just to make sure our interest rate curve is in line with the one used in the market originally.
+\end{itemize}
+
+With these reports we can make conclusions about the precision we achieved, methods applicability and potential implementation improvements required, which should be a good conclusion to our work, summarising the achievements and possible improvements to the models we used to showcase challenges in option pricing implementation.
+
+\section{Implementation and tests}
+All implementation details and testing results are avaiable on GitHub \footnote{https://github.com/su23/capstone\_option\_pricing}.
+\subsection{What needs to be thought of when developing an options pricer}
+When implementing an options pricer there are some very basic choices to make, then one has to build a set of required components and, eventually, has to fine-tune those components for optimum performance and result precision.
+
+The choices we have made will be specified in quare brackets below.
+
+The basic choices are:
+\begin{itemize}
+\item Types of products supported [American Options]
+\item Number of factors to consider [One factor – underlying value]
+\item Volatility model to use [Local Volatility]
+\item Pricing algorithm to use [PDE]
+\end{itemize}
+Given our basic choices, we found some extra components had to be built:
+\begin{itemize}
+\item Day count calculator
+\item Holiday calendars
+\item Volatility surface implementation
+\item Interest rates model
+\item Payoff model
+\item PDE grid
+\item PDE pricer
+\end{itemize}
+
+The importance, roles, and potential ways to improve these components are explained below.
+
+\subsubsection{Day count calculator}
+Our very simple day count calculator is implemented in \texttt{daycount.py}. This component acts as a bridge between market data, normally available as numbers for particular date/datetime points, and the mathematical models’ world where time is usually expressed as a year fraction.
+
+We implemented an ultra-simple approach where we assume each year consists of 365.25 days (mind the leap day, forget any other adjustments). Then we take a real number of days in a certain dates range and divide it by 365.25 to get a year fraction. An obvious disadvantage of this approach is that no year will have exact year fraction of 1.0, as leap years will be 366/365.25 and non-leap years 365/365.25. However, the chosen approach is very simple to implement and, most importantly, to reverse – we can easily calculate a date given a start date and a year fraction and we are 100\% sure our year fraction by date and date by year fraction functions are 100\% consistent.
+
+There are many other possible approaches, some of which may be market conventions for particular asset classes and/or markets. For instance, one may use the real number of days from all years involved as their daycounts, so that every year’s year fraction is actually 1.0. There are some conventions which would use 365.0 days as a daycount for all years. Also, one could use logic which would only take business days into account.
+
+\subsubsection{Holiday calendars}
+Our approach to business days is ultra-simple as well: we treat all dates as working days.
+
+In reality, there are multiple things to consider regarding holidays, mainly trading days and expiry dates. Trading days would be those days when trading is possible in the option's underlying, thus suggesting the additional variance accumulated for the underlying during these days is not 0. A separate question may arise when one wants to determine if a particular date can be used as an expiration date for an option. For this one may want to store a list of holidays for all countries of interest, and to combine those using, sometimes not very trivial, market conventions. For example, for a EURUSD FX trade one would probably assume that a union of USA and Eurozone holidays should be used as a holiday calendar, although that may also depend on rules of a particular exchange or market conventions used in OTC markets. For cross-currency trades like EURTRY, USD calendars may still be involved, as an acknowledgement of the fact that cross FX rate is frequently calculated using two USD rates – USDTRY and EURUSD in our example. Holiday calendar logic may also be different for determining when trading happens and which dates can be used as expiry dates for a particular option.
+
+\subsubsection{Volatility surface implementation}
+Our volatility surface uses implied volatilities we obtained from our source data, keyed on expiry date and strike. Our surface’s API provides access to interpolated volatilities in terms of expiry date (or, alternatively, year fraction) and a strike as well. To be able to use volatility at any point in time we use flat extrapolation in both time and strike spaces, and we use the following interpolation:
+\begin{itemize}
+\item We first linearly interpolate volatility smiles for every expiry date we have data for
+\item Given a strike we’re interested in, we pick two corresponding interpolated volatilities from smiles, adjacent to the expiry date of interest: V1 and V2
+\item We interpolate between V1 and V2 in time space.
+\end{itemize}
+
+If requested expiry date falls onto one of volatility smiles’ expiry dates, we do not interpolate in time space. 
+We do not modify volatility interpolation for weekends and holidays, assuming the implied vols we have already take weekends and holidays into account, so we use the same (interpolated) volatility for weekends and weekdays.
+
+Implementation can be found in \texttt{vol\_surface.py}.
+
+In real-world volatility models, a lot of extra features may be considered, including:
+
+\begin{itemize}
+\item Non-flat extrapolation – for smiles one may want to define linear extrapolation slope or something more complex, time extrapolation may be at least linear, not constant
+\item Linear interpolation can be replaced with a smoother one
+\item Not all markets assume volatility is strike-sticky. With our approach we assume volatility for a particular strike and time stays the same regardless of underlying value. However e.g., FX markets, will assume volatility is delta-sticky, i.e., implied volatility stays the same for a particular time and option’s delta. Commodity markets would normally use sticky moneyness, meaning volatility will be the same for time and $S/K$ ratio. Where $S$ is underlying value and $K$ is option’s strike.
+\item One could also consider distributing variance from weekends to weekdays, which may make pricing more realistic: one would have 0 added variance during weekends and non-zero on weekdays, still maintaining total variance in such a manner which would preserve volatility for known date points.
+\end{itemize}
+
+\subsubsection{Interest rates model}\label{interest_rates_model}
+We used a piecewise-constant interpolation for interest rates, which is better than a constant rate, but could be improved further for real-life applications.
+Our rates model is based on some USD rates from U.S. DEPARTMENT OF THE TREASURY \footnote{https://home.treasury.gov}, as we only deal with USD-denominated equities. Yield curve is implemented in \texttt{yc.py} with some helper code also available to fetch source data for interest rates.
+
+Data sources exist for rates in other currencies, some of which have fees for data access. There are normally many ways to build a yield curve for any particular currencies, but basing it off various observed interest rates products and bootstrapping. In many cases pricing applications would also distinguish between pricing and discounting curves, where pricing curve may match some kind of market consensus on a rate and discounting curve may account for cost of borrowing for a particular market participant.
+
+When a counterparty is known, market participants may use dedicated yield curves for the client in question, with rates accounting for default risk.
+
+\subsubsection{Payoff model}
+Payoff model needs to be built in order to run PDE pricer and Monte-Carlo simulations. It can be either embedded into pricers themselves, but we found useful to have it as a separate entity with an added functionality of getting a discounted payoff for a given date. This is implemented in \texttt{payoff.py}.
+
+For more complex payoffs, notably barriers, where price is not continuous as a function of underlying value, one may find it useful sometimes to amend payoffs slightly to improve pricing precision, e.g., move a barrier a bit, calculate a more stable price, and then adjust the resulting price, accounting for initial barrier shift.
+
+\subsubsection{PDE Grid}
+We found it somewhat useful to have a PDE grid separated from PDE pricer. Our grid is parameterised by the number of time points T and spot points S. We use constant steps in both T and S, with the latter allowing us to involve no interpolation when getting t+1 values for the same spot value during PDE steps.
+Our grid is centred around current spot value and its code is located in \texttt{pde\_grid.py}.
+The extensions of this approach could include:
+\begin{itemize}
+\item Fewer points in the ITM part of grid where the option’s value may already be equal to that of a forward. 
+\item Uneven grid, e.g., logarithmic
+\item More time points towards short end of the grid, where market data normally has more points (e.g., volatility tenors may be something like ON TN 1W 1M 3M 6M 1Y 2Y)
+\end{itemize}
+
+\subsubsection{PDE Pricer}
+We used an implicit PDE pricer, as suggested in \cite{Hjelmberg}. We also calculated a maximum of so far estimated price and current discounted payoff at every point of time as suggested in \cite{hull}, thus we haven’t calculated an early execution boundary. We have used NumPy linalg solver to solve the systems of linear equations at every time point, without any explicit optimisations to account for the matrix being 3-diagonal. Implementation for PDE pricer is located in \texttt{pde\_pricer.py}.
+
+Every time step could potentially be parallelised, so that potentially slower queries like getting volatilities for strikes could be parallelised / vectorised. 
+
+An optimisation could be also added for non-dividend American calls, to avoid early expiry checks for those.
+
+Speaking of dividends, taking them into account is also a way to make the existing algorithm more versatile.
+
+\subsubsection{Bid/offer spread}
+We haven’t taken bid/offer spread into account at all, while it could be taken into account for underlying price, rates and volatilities.
+
+\subsubsection{Multi-factor models}
+We are only considering a single factor – the underlying share price itself. However, experienced market participants may use multi-factor models, such as stochastic volatility models (underlying and its volatility are stochastic factors) or stochastic rates models, where non-rates underlying and interest rates are both considered stochastic, and others.
+
+\section{Test results}
+\subsection{Volatility surface}
+
+We have collected what our model thinks volatilities are for strikes in [500, 2000) with step 10 and dates within 2 years of 2020/01/21. The surface had been initialised with market data implied vols, using an average of call and put vols as values.
+This calculation can be found in tests/vol\_surface\_test.py, dump\_vol\_surface():
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/vol_surface.png}
+  \caption{Volatility surface}\label{fig:vol_surface}
+ \end{center}
+\end{figure}
+
+We can see volatility skew is present in Figure \ref{fig:vol_surface} for most expiry dates and we can see volatility is generally growing with time. We can also observe two periods where volatility skew is more pronounced – around 2 months and 9 months.
+
+\subsection{PDE pricer analytical tests}
+We have conducted a series of tests for PDE pricer, mostly in form of automated tests in python. Some basic unit tests check how PDE pricer initially fills the grid, asserts common as of date, etc. More advanced tests check fundamental pricing relationships hold.
+
+All tests mentioned below can be found in \texttt{tests/pde\_pricer\_test.py}.
+\begin{itemize}
+\item \texttt{call\_price\_has\_correct\_dynamics}
+
+This test checks a call with lower strike has greater price, as an option to buy cheaper is worth more than an option to buy at a higher price.
+\item \texttt{put\_price\_has\_correct\_dynamics}
+
+This test checks a put with lower strike has lower price, as an option to sell cheaper is worth less than an option to sell at a higher price.
+\item \texttt{higher\_vol\_means\_more\_expensive\_option}
+
+Using mocked constant volatilities of 10\% and 11\% this test checks than an option price is higher when the volatility is higher, i.e., vega risk is positive for (long) American options.
+\item \texttt{higher\_rates\_mean\_less\_expensive\_option}
+
+Using mocked interest rates this test checks an option becomes cheaper if interest rates go up. This would happen for all future payoffs – if rates go up, cashflows in the future are worth less at present moment in time.
+\item \texttt{deep\_otm\_price\_is\_0}
+
+Deeply out of the money option (a put with a very low strike in our case) is worthless, as it has no chance to be exercised, thus its price has to be 0
+\item \texttt{deep\_itm\_put\_price\_is\_k\_minus\_s}
+
+A deep in the money put is sure to be exercised and thus its price is the same as a price of a forward. Given we deal with American options and interest rates are positive, we will always choose to exercise a deep ITM put immediately, as we would get $(K-S)$ payoff right now in this situation. If we were to do it later, we would get $(K-S/df)*df = df*K-S < K-S$, where $df$ is a discount factor for the expiry date, $0 < df < 1$. Thus, as we would exercise immediately, the price should be exactly $K-S$.
+\item \texttt{call\_with\_const\_vol\_roughly\_matches\_Black\_Scholes}
+
+We compare an American call option price to a European call option price with constant volatility and rates, because without dividends and with positive interest rates early exercise is not feasible for American call options. We do see a bit of numerical noise, but get a good match of Black-Scholes European call price vs our PDE price for an American Call option.
+\end{itemize}
+
+
+\subsection{PDE pricer speed and convergence tests}
+We have conducted several tests using PDE pricer to see how our price and execution time depend on grid settings.
+We used a put with $K=2700$, expiring in 2 years, constant volatility of 15\%, $S=2680$ and interest rates from our source data, for as of date=2014-01-20.
+
+\subsubsection{Performance and precision as a function of number of time points}
+Firstly, we used spot grid with 50 values and varied the number of time values between 10 and 3000 with step 10.
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/pv_time_points.png}
+  \caption{PV as a function of number of time points}\label{fig:pv_time_points}
+ \end{center}
+\end{figure}
+
+As expected, PV moves decrease as we increase the number of points (see Figure \ref{fig:pv_time_points})
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/pv_time.png}
+  \caption{Execution time as a function of number of time points}\label{fig:pv_time}
+ \end{center}
+\end{figure}
+
+Execution time grew linearly (see Figure \ref{fig:pv_time}).
+
+\subsubsection{Performance and precision as a function of number of time points, constant interest rate and volatility}
+We have also conducted an experiment with only varying the number of time points t, but using a constant (and not very realistic) interest rate or constant volatility. The PV graph still has significant noise on the right in both cases, for const interest rate see Figure \ref{fig:pv_const_interest_rate}.
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/pv_const_interest_rate.png}
+  \caption{PV as a function of number of time points, const rate}\label{fig:pv_const_interest_rate}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/pv_const_vol.png}
+  \caption{PV as a function of number of time points, const vol}\label{fig:pv_const_vol}
+ \end{center}
+\end{figure}
+
+
+For constant volatility the noise is smaller, but still can be observed (see Figure \ref{fig:pv_const_vol}):
+
+
+\subsubsection{Performance and precision as a function of number of spot points}
+We also used time grid with 50 values and varied the number of spot values between 10 and 1000 with step 10.
+
+We observed a much better convergence in terms of PV (see Figure \ref{fig:pv_spot_points}).
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/pv_spot_points.png}
+  \caption{PV as a function of number of spot points}\label{fig:pv_spot_points}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/spot_points_time.png}
+  \caption{Execution time as a function of number of spot points}\label{fig:spot_points_time}
+ \end{center}
+\end{figure}
+
+Performance graph has some random spikes, but in general is linear (see Figure \ref{fig:spot_points_time})
+
+A different run produced different spikes (Figure \ref{fig:spot_points_time2}), so we are sure this is some kind of "environmental effect":
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/spot_points_time2.png}
+  \caption{Execution time as a function of number of spot points, different run}\label{fig:spot_points_time2}
+ \end{center}
+\end{figure}
+
+
+The graph’s general shape means, given our 3-diagonall matrix structure for solving equations, the solver we use is able to solve them with a linear complexity.
+
+\subsubsection{Performance and precision as a function of number of time AND spot points}
+
+As a combined experiment, we used time and spot grids with same numbers of points, varied values between 10 and 300 with step 1: Figures \ref{fig:pv_t_and_s} and \ref{fig:time_t_and_s}
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/pv_t_and_s.png}
+  \caption{PV as a function of number of time and spot points}\label{fig:pv_t_and_s}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/time_t_and_s.png}
+  \caption{Execution time as a function of number of time and spot points}\label{fig:time_t_and_s}
+ \end{center}
+\end{figure}
+
+\subsubsection{Analysis}
+We see much more noise for big numbers of time points, compared to big numbers of spot points. We can observe decreased precision when we were varying number of time points, regardless of if we were varying number of spot points or not. However, for a constant number of time points, we have a much better precision. Initially we assumed this was caused by rates interpolation, so we used a constant rate to rule that out. An experiment with constant rate and varying number of T points still has much more noise that an experiment with varying number of S points. Thus, we conclude PDE implementation is inherently prone to more noise as a result of T lattice choice than S lattice choice.
+
+Calculation time is growing linearly in first two experiments and is (thus, predictably) growing quadratically in a combined experiment.
+
+As for the performance aspect, we observe no spikes in calculation time when we are varying the number of time points only, but we do, when we are varying the number of post points. This points to environmental causes like garbage collection, which seem to kick in more frequently when we use larger matrices and wouldn’t be seen with number of spot points equal to 50, as seen in tests where we varied the number of time points only.
+
+
+\subsection{PDE pricer market test}
+
+We have conducted a comparison of our PDE pricer results against market prices we obtained from \textcolor{red}{[TODO ADD PRICES SOURCE]} together with volatilities. We chose GOOGL security as a liquid one, having no dividends. We were using prices as of 21-01-2020, as this date had most data for GOOGL. We have conducted tests for calls and puts separately, as implied volatilities for calls and puts with same strikes were different in the data we obtained.
+
+\subsubsection{Methodology}
+
+Separately for calls and puts we were doing the following:
+We used spot (1482.25) and implied volatilities from market data to build a strike-based volatility surface. Then for every strike and expiry date pair we priced an option with same settings of PDE grid: a total of 366 uniformly distributed time points across a total of 100 uniformly distributed spot points, ranging from spot * 0.5 to spot * 2. We used our yield curve for as of date 21-01-2020, built as described in Interest rates model section \ref{interest_rates_model}.
+For every option we calculated its price (Present Value, PV) and 2 benchmarks against the source data bid-offer range: “Diff” – the absolute difference against mid market price (an average of bid and ask), and a “Bad Diff” – the amount (in dollars) showing by how much our PV is less than bid (negative) or is greater than ask price (positive). If our PV was inside market bid-ask range, Bad Diff was set to 0.
+This calculation was conducted using python code in reports/pde\_pv\_diffs.py. The order of iteration was in line with source data: the “outer loop” goes over increasing expiry dates, and within every expiry date the “inner loop” goes over strikes, so first result is strike[0], expiry[0], 2nd is strike[1] expiry[0], etc.
+
+\subsubsection{Results for puts}
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/bad_diffs_for_puts.png}
+  \caption{"Bad Diff" for puts}\label{fig:bad_diffs_for_puts}
+ \end{center}
+\end{figure}
+
+Figure \ref{fig:bad_diffs_for_puts} shows Bad Diff (in dollars) values for put options we calculated, as an Expiry Date vs Strike pivot table. Notably a high proportion of values have Bad Diff equal to 0, which means mostly our PDE pricer gives results consistent with the actual market.
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/both_diffs_for_puts.png}
+  \caption{Diff and "Bad Diff" for puts}\label{fig:both_diffs_for_puts}
+ \end{center}
+\end{figure}
+Figure. \ref{fig:both_diffs_for_puts} shows both Diff and Bad Diff values for puts, in the order of the source data i.e. leftmost part shows increasing strikes’ results for the minimal expiry date (24-01-2020), followed by increasing strikes’ results for the next expiry date (31-01-2020) and so on.
+Results for put options can be found in \ref{appendix:bad_diff_for_puts}.
+
+\subsubsection{Results for calls}
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/bad_diffs_for_calls.png}
+  \caption{"Bad Diff" for calls}\label{fig:bad_diffs_for_calls}
+ \end{center}
+\end{figure}
+Figure \ref{fig:bad_diffs_for_calls} shows Bad Diff (in dollars) values for call options we calculated, as an Expiry Date vs Strike pivot table. Here we can also observe a high proportion of values have Bad Diff equal to 0.
+
+\begin{figure}[H]
+ \begin{center}
+  \includegraphics[width=1\textwidth]{images/both_diffs_for_calls.png}
+  \caption{Diff and "Bad Diff" for calls}\label{fig:both_diffs_for_calls}
+ \end{center}
+\end{figure}
+Figure \ref{fig:both_diffs_for_calls} shows both Diff and Bad Diff values for calls, in the order of the source data.
+Results for call options can be found in \ref{appendix:bad_diff_for_calls}.
+
+\subsubsection{Discussion}
+
+Despite we can see our PDE pricer results are not ideal, we can argue this is still a good result for a research0grade pricer: 879 out of 1703 put prices (52\%) and 778 out of 1703 call prices (46\%) have a bad diff of 0. Of course, this wouldn’t be sufficient for a real-life pricer, but the main purpose of this work was to show what has to be considered when implementing option pricers, so our main goal with PDE pricer was mostly to show its results make sense. 
+For puts we see most positive bad diffs are seen for high strikes and big expiry dates. Indeed, we would not expect to see any diffs for low strikes, as puts for low strikes are out of the money and hence their absolute prices are close to 0. Interestingly, we see most negative diffs around at the money strikes (1482.25 is market spot value) for 02-02-2020 and 14-02-2020. We also see some positive bad diffs for strikes close to ATM for 28-02-2020, 30-02-2020 and 17-04-2020. All these close-to-ATM strikes diffs may be an indication of insufficient grid density and/or pronounced effect of imperfect volatility surface interpolation around ATM strike where volatility surface has biggest curvature for most expiry dates.
+
+For calls most severe diffs are also seen in the in-the-money region (low strikes) for bigger expiry dates, with some additional diffs also observed around ATM.
+The differences we see are pretty well clustered, which is an indication of their non-random nature. As we said when we described our implementation, there are quite a few simplified approaches used, especially around interpolation of both rates and volatilities. Given almost half of our results are within the bid-offer range, and that call prices match Black-Scholes European prices well for constant volatilities, as seen in tests, we can conclude our PDE pricer implementation is correct with a very high degree of confidence.
+
+\appendix
+\section{Bad Diff for Puts}\label{appendix:bad_diff_for_puts}
+\includepdf[pages={1-5}]{appendix/appendix_a_bad_diff_for_puts.pdf} 
+\section{Bad Diff for Calls}\label{appendix:bad_diff_for_calls}
+\includepdf[pages={1-5}]{appendix/appendix_b_bad_diff_for_calls.pdf} 
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%% Usage of \cite is as follows:
+%%   \cite{key}          ==>>  [#]
+%%   \cite[chap. 2]{key} ==>>  [#, chap. 2]
+%%   \citet{key}         ==>>  Author [#]
+
+%% References with bibTeX database:
+
+\bibliographystyle{model1-num-names}
+\bibliography{sample.bib}
+
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use model1-num-names.bst.
+
+%% References without bibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+
+% \bibitem{}
+
+% \end{thebibliography}
+
+%\begin{thebibliography}{00}
+%\end{thebibliography}
+
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-1-num.tex'.
