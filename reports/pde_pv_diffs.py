@@ -40,9 +40,7 @@ def run_diff(input_data_file, output_data_file):
     data['DataDate'] = pd.to_datetime(data['DataDate'])
     data['Expiration'] = pd.to_datetime(data['Expiration'])
     
-    expiry_date = date(2021,1,15)
     spot = 1482.25
-    strike = 1340
     
     result = pd.DataFrame(columns=["Type", "Expiry", "Strike", "PV", "Bid", "Mid", "Ask", "Diff", "BadDiff"])
     
